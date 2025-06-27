@@ -1,0 +1,19 @@
+# React .gitignore template
+# Source: https://www.toptal.com/developers/gitignore/api/react
+
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
+node_modules
+bower_components
+
+*.sublime*
+
+psd
+thumb
+sketch
+
+# End of React .gitignore template
