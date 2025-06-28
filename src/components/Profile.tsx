@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Settings, LogOut, CreditCard } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -9,6 +10,7 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
   const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Get current user from Supabase
@@ -38,13 +40,12 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
 
   const handleBillingClick = () => {
     onClose(); // Close the dropdown first
-    window.location.href = '/billing';
+    navigate('/billing');
   };
 
   const handleSettingsClick = () => {
     onClose(); // Close the dropdown first
-    // You can add navigation to settings page here
-    // window.location.href = '/settings';
+    navigate('/account');
   };
 
   if (!isOpen) return null;
@@ -69,14 +70,14 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
         </div>
        
         <div className="space-y-1">
-          <button 
+          <button
             onClick={handleSettingsClick}
             className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left"
           >
             <Settings className="w-4 h-4 text-gray-500" />
             <span className="text-gray-700">Account Settings</span>
           </button>
-          <button 
+          <button
             onClick={handleBillingClick}
             className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left"
           >
