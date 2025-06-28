@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Globe, ExternalLink, LogOut, User } from 'lucide-react';
+import { Plus, Globe, ExternalLink } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 import CreateWebsiteModal from '../components/CreateWebsiteModal';
@@ -114,14 +114,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
-
   const handleCreateWebsite = () => {
     setCreateModalType('website');
     setIsCreateModalOpen(true);
@@ -161,28 +153,12 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header with user info and logout */}
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">
-            Welcome back, {firstName}! Here's what's happening with your websites.
-          </p>
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <User className="w-4 h-4" />
-            <span>{user.email}</span>
-          </div>
-          <button
-            onClick={handleSignOut}
-            className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
-          </button>
-        </div>
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-600 mt-1">
+          Welcome back, {firstName}!
+        </p>
       </div>
 
       {/* Quick Actions */}
