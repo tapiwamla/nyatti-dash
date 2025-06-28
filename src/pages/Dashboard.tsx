@@ -8,6 +8,7 @@ const Dashboard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createModalType, setCreateModalType] = useState<'website' | 'shop'>('website');
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [firstName, setFirstName] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [userStats, setUserStats] = useState({
     totalSites: 0,
@@ -18,6 +19,31 @@ const Dashboard: React.FC = () => {
     expiringSoon: 0
   });
 
+  const getUserFirstName = (user: SupabaseUser): string => {
+    // Check user metadata for first name
+    if (user.user_metadata?.first_name) {
+      return user.user_metadata.first_name;
+    }
+    
+    // Check if there's a full name and extract first name
+    if (user.user_metadata?.full_name) {
+      return user.user_metadata.full_name.split(' ')[0];
+    }
+    
+    // Check app metadata as fallback
+    if (user.app_metadata?.first_name) {
+      return user.app_metadata.first_name;
+    }
+    
+    // If email exists, use the part before @ as fallback
+    if (user.email) {
+      return user.email.split('@')[0];
+    }
+    
+    // Final fallback
+    return 'User';
+  };
+
   useEffect(() => {
     // Get current user and set up auth listener
     const getUser = async () => {
@@ -26,6 +52,7 @@ const Dashboard: React.FC = () => {
       setLoading(false);
 
       if (user) {
+        setFirstName(getUserFirstName(user));
         // Fetch user's website and domain stats here
         // This is where you'd query your websites and domains tables
         await fetchUserStats(user.id);
@@ -39,9 +66,11 @@ const Dashboard: React.FC = () => {
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           setUser(session.user);
+          setFirstName(getUserFirstName(session.user));
           await fetchUserStats(session.user.id);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
+          setFirstName('');
           setUserStats({
             totalSites: 0,
             activeSites: 0,
@@ -137,7 +166,7 @@ const Dashboard: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-600 mt-1">
-            Welcome back, {user.email}! Here's what's happening with your websites.
+            Welcome back, {firstName}! Here's what's happening with your websites.
           </p>
         </div>
         
