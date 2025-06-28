@@ -34,7 +34,7 @@ const Support: React.FC<SupportProps> = ({ isOpen, onClose }) => {
             <Mail className="w-5 h-5 text-primary" />
             <div>
               <p className="font-medium text-gray-900">Email Support</p>
-              <p className="text-sm text-gray-600">support@nyatti.com</p>
+              <p className="text-sm text-gray-600">hello@nyatti.com</p>
             </div>
           </button>
          
@@ -42,7 +42,7 @@ const Support: React.FC<SupportProps> = ({ isOpen, onClose }) => {
             <Phone className="w-5 h-5 text-primary" />
             <div>
               <p className="font-medium text-gray-900">Phone Support</p>
-              <p className="text-sm text-gray-600">+1 (555) 123-4567</p>
+              <p className="text-sm text-gray-600">+254797951250</p>
             </div>
           </button>
         </div>
