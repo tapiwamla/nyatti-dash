@@ -51,10 +51,10 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
               <img 
                 src="/logo.png" 
                 alt="Nyatti Logo" 
-                className="w-8 h-8 rounded-lg"
+                className="w-8 h-8 rounded-sm"
               />
               <h1 className="text-xl text-gray-900">
-                <span className="font-bold">Nyatti Pro</span>
+                <span className="font-bold">Nyatti</span>
               </h1>
             </div>
           </div>

@@ -116,11 +116,11 @@ const Login: React.FC = () => {
             <img 
               src="/logo.png" 
               alt="Logo" 
-              className="h-16 w-auto"
+              className="h-16 w-auto rounded-lg"
             />
           </div>
           <div className="flex-1">
-            <h2 className="text-3xl font-extrabold text-gray-900">
+            <h2 className="text-3xl font-bold text-gray-900">
               Sign in
             </h2>
             <p className="mt-2 text-sm text-gray-600">
