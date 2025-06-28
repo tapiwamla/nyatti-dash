@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { User, Settings, LogOut, CreditCard } from 'lucide-react';
+import { supabase } from '../lib/supabase'; 
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -9,6 +10,24 @@ interface ProfileModalProps {
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef }) => {
   const [position, setPosition] = useState({ top: 0, right: 0 });
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Get current user from Supabase
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getCurrentUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (isOpen && anchorRef.current) {
@@ -23,11 +42,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef 
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed bg-white rounded-lg shadow-xl border border-gray-200 z-50 w-64"
-      style={{ 
-        top: `${position.top}px`, 
-        right: `${position.right}px` 
+      style={{
+        top: `${position.top}px`,
+        right: `${position.right}px`
       }}
     >
       <div className="p-4">
@@ -36,11 +55,17 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef 
             <User className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">John Doe</h3>
-            <p className="text-sm text-gray-600">john.doe@example.com</p>
+            <h3 className="font-semibold text-gray-900">
+              {user?.user_metadata?.full_name || 
+               user?.user_metadata?.name || 
+               user?.user_metadata?.display_name ||
+               (user?.email?.split('@')[0]) || 
+               'User'}
+            </h3>
+            <p className="text-sm text-gray-600">{user?.email || 'No email'}</p>
           </div>
         </div>
-        
+       
         <div className="space-y-1">
           <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left">
             <Settings className="w-4 h-4 text-gray-500" />
