@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ArrowRight, Check, Palette, Monitor, ShoppingCart, Globe, X, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Palette, Monitor, ShoppingCart, Globe, X, Sparkles, AlertCircle } from 'lucide-react';
 
 interface WebsiteData {
   type: 'website' | 'shop';
@@ -9,12 +9,9 @@ interface WebsiteData {
   colorScheme: string;
   customColor?: string;
   themeStyle: 'light' | 'dark';
-  template: string;
-  layoutStyle: string;
   pages: string[];
   features: string[];
-  domainOption: string;
-  customDomain?: string;
+  subdomain: string;
 }
 
 interface CreateWebsiteModalProps {
@@ -25,6 +22,8 @@ interface CreateWebsiteModalProps {
 
 const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose, initialType }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [subdomainAvailable, setSubdomainAvailable] = useState<boolean | null>(null);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
   const [websiteData, setWebsiteData] = useState<WebsiteData>({
     type: initialType || 'website',
     name: '',
@@ -32,11 +31,9 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
     industry: 'Business & Consulting', // Default selection
     colorScheme: 'Forest Green', // Default selection
     themeStyle: 'light', // Default selection
-    template: '',
-    layoutStyle: 'Header Navigation', // Default selection
     pages: ['Home', 'About Us', 'Contact'], // Default selections
     features: ['Contact Forms', 'SEO Optimization'], // Default selections
-    domainOption: 'subdomain', // Default selection
+    subdomain: '',
   });
 
   useEffect(() => {
@@ -45,7 +42,6 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
       setWebsiteData(prev => ({
         ...prev,
         type: 'shop',
-        template: 'Single Store', // Default for shop
         pages: ['Home', 'Shop', 'About Us', 'Contact', 'Cart'], // Default for shop
         features: ['Payment Gateway', 'Inventory Management'] // Default for shop
       }));
@@ -54,7 +50,6 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
       setWebsiteData(prev => ({
         ...prev,
         type: 'website',
-        template: 'Modern Business', // Default for website
         pages: ['Home', 'About Us', 'Contact'], // Default for website
         features: ['Contact Forms', 'SEO Optimization'] // Default for website
       }));
@@ -74,19 +69,6 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
     { name: 'Sunset Orange', primary: '#f97316', secondary: '#ea580c', accent: '#dc2626' },
     { name: 'Royal Purple', primary: '#9333ea', secondary: '#7c3aed', accent: '#6d28d9' },
     { name: 'Rose Pink', primary: '#ec4899', secondary: '#db2777', accent: '#be185d' },
-  ];
-
-  const websiteTemplates = [
-    'Modern Business', 'Creative Portfolio', 'Professional Services',
-    'Landing Page', 'Blog & News', 'Corporate'
-  ];
-
-  const shopTemplates = [
-    'Single Store', 'Marketplace'
-  ];
-
-  const layoutStyles = [
-    'Header + Sidebar', 'Header Navigation', 'Full Width', 'Boxed Layout'
   ];
 
   const websitePages = [
@@ -111,8 +93,35 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
     'Multi-currency', 'Shipping Calculator', 'Abandoned Cart Recovery'
   ];
 
+  // Mock function to check subdomain availability
+  const checkSubdomainAvailability = async (subdomain: string) => {
+    if (!subdomain || subdomain.length < 3) {
+      setSubdomainAvailable(null);
+      return;
+    }
+
+    setCheckingAvailability(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Mock logic - some common subdomains are "taken"
+    const takenSubdomains = ['www', 'admin', 'api', 'blog', 'shop', 'store', 'test', 'demo'];
+    const isAvailable = !takenSubdomains.includes(subdomain.toLowerCase());
+    
+    setSubdomainAvailable(isAvailable);
+    setCheckingAvailability(false);
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      checkSubdomainAvailability(websiteData.subdomain);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [websiteData.subdomain]);
+
   const handleNext = () => {
-    if (currentStep < 11) {
+    if (currentStep < 9) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -156,13 +165,20 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
       industry: 'Business & Consulting',
       colorScheme: 'Forest Green',
       themeStyle: 'light',
-      template: 'Modern Business',
-      layoutStyle: 'Header Navigation',
       pages: ['Home', 'About Us', 'Contact'],
       features: ['Contact Forms', 'SEO Optimization'],
-      domainOption: 'subdomain',
+      subdomain: '',
     });
+    setSubdomainAvailable(null);
+    setCheckingAvailability(false);
     onClose();
+  };
+
+  const isNextDisabled = () => {
+    if (currentStep === 8) {
+      return !websiteData.subdomain || subdomainAvailable === false || checkingAvailability;
+    }
+    return false;
   };
 
   const renderStep = () => {
@@ -179,7 +195,6 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
                 onClick={() => setWebsiteData(prev => ({ 
                   ...prev, 
                   type: 'website',
-                  template: 'Modern Business',
                   pages: ['Home', 'About Us', 'Contact'],
                   features: ['Contact Forms', 'SEO Optimization']
                 }))}
@@ -197,7 +212,6 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
                 onClick={() => setWebsiteData(prev => ({ 
                   ...prev, 
                   type: 'shop',
-                  template: 'Single Store',
                   pages: ['Home', 'Shop', 'About Us', 'Contact', 'Cart'],
                   features: ['Payment Gateway', 'Inventory Management']
                 }))}
@@ -377,59 +391,6 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
         );
 
       case 6:
-        const templates = websiteData.type === 'shop' ? shopTemplates : websiteTemplates;
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Choose Template</h2>
-              <p className="text-gray-600 text-sm">Select a template that fits your {websiteData.type}</p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-64 overflow-y-auto">
-              {templates.map((template) => (
-                <button
-                  key={template}
-                  onClick={() => setWebsiteData(prev => ({ ...prev, template }))}
-                  className={`p-4 border-2 rounded-lg transition-all text-left ${
-                    websiteData.template === template
-                      ? 'border-primary bg-primary/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="w-full h-20 bg-gray-100 rounded mb-3"></div>
-                  <h3 className="text-xs font-semibold text-gray-900">{template}</h3>
-                </button>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 7:
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Layout Style</h2>
-              <p className="text-gray-600 text-sm">Choose how your content will be organized</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {layoutStyles.map((layout) => (
-                <button
-                  key={layout}
-                  onClick={() => setWebsiteData(prev => ({ ...prev, layoutStyle: layout }))}
-                  className={`p-4 border-2 rounded-lg transition-all ${
-                    websiteData.layoutStyle === layout
-                      ? 'border-primary bg-primary/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="w-full h-16 bg-gray-100 rounded mb-3"></div>
-                  <h3 className="text-xs font-semibold text-gray-900">{layout}</h3>
-                </button>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 8:
         const pages = websiteData.type === 'shop' ? shopPages : websitePages;
         return (
           <div className="space-y-4">
@@ -458,7 +419,7 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
           </div>
         );
 
-      case 9:
+      case 7:
         const features = websiteData.type === 'shop' ? shopFeatures : websiteFeatures;
         return (
           <div className="space-y-4">
@@ -487,64 +448,77 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
           </div>
         );
 
-      case 10:
+      case 8:
         return (
           <div className="space-y-4">
             <div className="text-center">
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Domain Options</h2>
-              <p className="text-gray-600 text-sm">Choose how you want to handle your domain</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Choose Your Domain</h2>
+              <p className="text-gray-600 text-sm">Pick a subdomain for your {websiteData.type}</p>
             </div>
-            <div className="space-y-3">
-              <button
-                onClick={() => setWebsiteData(prev => ({ ...prev, domainOption: 'subdomain' }))}
-                className={`w-full p-3 border-2 rounded-lg transition-all text-left ${
-                  websiteData.domainOption === 'subdomain'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <h3 className="font-semibold text-gray-900 mb-1 text-sm">Free Subdomain</h3>
-                <p className="text-xs text-gray-600">yoursite.nyatti.com (Free)</p>
-              </button>
-              <button
-                onClick={() => setWebsiteData(prev => ({ ...prev, domainOption: 'new' }))}
-                className={`w-full p-3 border-2 rounded-lg transition-all text-left ${
-                  websiteData.domainOption === 'new'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <h3 className="font-semibold text-gray-900 mb-1 text-sm">Purchase New Domain</h3>
-                <p className="text-xs text-gray-600">Buy a new custom domain ($12/year)</p>
-              </button>
-              <button
-                onClick={() => setWebsiteData(prev => ({ ...prev, domainOption: 'existing' }))}
-                className={`w-full p-3 border-2 rounded-lg transition-all text-left ${
-                  websiteData.domainOption === 'existing'
-                    ? 'border-primary bg-primary/5'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <h3 className="font-semibold text-gray-900 mb-1 text-sm">Use Existing Domain</h3>
-                <p className="text-xs text-gray-600">Connect a domain you already own</p>
-              </button>
-            </div>
-            {websiteData.domainOption === 'existing' && (
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Domain Name</label>
-                <input
-                  type="text"
-                  value={websiteData.customDomain || ''}
-                  onChange={(e) => setWebsiteData(prev => ({ ...prev, customDomain: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="example.com"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Subdomain
+                </label>
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={websiteData.subdomain}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
+                        setWebsiteData(prev => ({ ...prev, subdomain: value }));
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-24"
+                      placeholder="mysite"
+                      maxLength={50}
+                    />
+                    <span className="absolute right-3 top-2 text-sm text-gray-500">.nyatti.site</span>
+                  </div>
+                </div>
+                
+                {websiteData.subdomain && websiteData.subdomain.length >= 3 && (
+                  <div className="mt-2">
+                    {checkingAvailability ? (
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <div className="animate-spin w-4 h-4 border-2 border-gray-300 border-t-primary rounded-full"></div>
+                        <span>Checking availability...</span>
+                      </div>
+                    ) : subdomainAvailable === true ? (
+                      <div className="flex items-center space-x-2 text-sm text-green-600">
+                        <Check className="w-4 h-4" />
+                        <span>{websiteData.subdomain}.nyatti.site is available!</span>
+                      </div>
+                    ) : subdomainAvailable === false ? (
+                      <div className="flex items-center space-x-2 text-sm text-red-600">
+                        <AlertCircle className="w-4 h-4" />
+                        <span>{websiteData.subdomain}.nyatti.site is not available</span>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
+                
+                <p className="text-xs text-gray-500 mt-2">
+                  Your website will be available at: <strong>{websiteData.subdomain || 'yoursite'}.nyatti.site</strong>
+                </p>
+                
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                  <div className="flex items-start space-x-2">
+                    <Globe className="w-4 h-4 text-blue-500 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-medium text-blue-900">Free Subdomain</p>
+                      <p className="text-xs text-blue-700">
+                        Get started with a free subdomain. You can always add a custom domain later.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         );
 
-      case 11:
+      case 9:
         return (
           <div className="space-y-4">
             <div className="text-center">
@@ -566,8 +540,8 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
                   <span className="text-sm text-gray-900">{websiteData.industry}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm font-medium text-gray-700">Template:</span>
-                  <span className="text-sm text-gray-900">{websiteData.template}</span>
+                  <span className="text-sm font-medium text-gray-700">Domain:</span>
+                  <span className="text-sm text-gray-900">{websiteData.subdomain}.nyatti.site</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm font-medium text-gray-700">Pages:</span>
@@ -576,10 +550,6 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
                 <div className="flex justify-between">
                   <span className="text-sm font-medium text-gray-700">Features:</span>
                   <span className="text-sm text-gray-900">{websiteData.features.length} features</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-medium text-gray-700">Domain:</span>
-                  <span className="text-sm text-gray-900 capitalize">{websiteData.domainOption}</span>
                 </div>
               </div>
             </div>
@@ -609,7 +579,7 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <h1 className="text-lg font-semibold text-gray-900">Create Website</h1>
-            <span className="text-sm text-gray-500">Step {currentStep} of 11</span>
+            <span className="text-sm text-gray-500">Step {currentStep} of 9</span>
           </div>
           <button
             onClick={handleClose}
@@ -624,7 +594,7 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
               className="bg-primary h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 11) * 100}%` }}
+              style={{ width: `${(currentStep / 9) * 100}%` }}
             ></div>
           </div>
         </div>
@@ -644,10 +614,11 @@ const CreateWebsiteModal: React.FC<CreateWebsiteModalProps> = ({ isOpen, onClose
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
           </button>
-          {currentStep < 11 && (
+          {currentStep < 9 && (
             <button
               onClick={handleNext}
-              className="flex items-center space-x-2 bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg transition-colors shadow-md hover:shadow-lg"
+              disabled={isNextDisabled()}
+              className="flex items-center space-x-2 bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span>Next</span>
               <ArrowRight className="w-4 h-4" />
