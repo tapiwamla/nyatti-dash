@@ -16,6 +16,7 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
     };
+
     getCurrentUser();
 
     // Listen for auth changes
@@ -33,6 +34,17 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
     } catch (error) {
       console.error('Error signing out:', error);
     }
+  };
+
+  const handleBillingClick = () => {
+    onClose(); // Close the dropdown first
+    window.location.href = '/billing';
+  };
+
+  const handleSettingsClick = () => {
+    onClose(); // Close the dropdown first
+    // You can add navigation to settings page here
+    // window.location.href = '/settings';
   };
 
   if (!isOpen) return null;
@@ -57,15 +69,21 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
         </div>
        
         <div className="space-y-1">
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left">
+          <button 
+            onClick={handleSettingsClick}
+            className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left"
+          >
             <Settings className="w-4 h-4 text-gray-500" />
             <span className="text-gray-700">Account Settings</span>
           </button>
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left">
+          <button 
+            onClick={handleBillingClick}
+            className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left"
+          >
             <CreditCard className="w-4 h-4 text-gray-500" />
             <span className="text-gray-700">Billing & Payments</span>
           </button>
-          <button 
+          <button
             onClick={handleSignOut}
             className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left text-red-600"
           >
