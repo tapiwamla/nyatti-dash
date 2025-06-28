@@ -1,12 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Globe, 
-  Mail, 
-  CreditCard, 
+import {
+  LayoutDashboard,
+  Globe,
+  Mail,
+  CreditCard,
   X,
-  ExternalLink
+  ExternalLink,
+  User
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -20,6 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { to: '/websites', icon: Globe, label: 'Websites' },
     { to: '/domains', icon: ExternalLink, label: 'Domains' },
     { to: '/emails', icon: Mail, label: 'Emails' },
+    { to: '/account', icon: User, label: 'Account' },
     { to: '/billing', icon: CreditCard, label: 'Billing' },
   ];
 
@@ -27,12 +29,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     <>
       {/* Mobile overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={onClose}
         />
       )}
-      
+     
       {/* Sidebar */}
       <aside className={`
         fixed top-16 left-0 h-full w-64 bg-gray-900 text-white z-40 transform transition-transform duration-300 ease-in-out
@@ -45,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <X className="w-5 h-5" />
           </button>
         </div>
-        
+       
         <nav className="px-4 py-6">
           <ul className="space-y-2">
             {navItems.map((item) => (

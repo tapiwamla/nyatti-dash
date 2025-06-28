@@ -8,14 +8,15 @@ import Websites from './pages/Websites';
 import Domains from './pages/Domains';
 import Emails from './pages/Emails';
 import Billing from './pages/Billing';
+import Account from './pages/Account';
 import Login from './components/Login';
 import Register from './components/Register';
 
 // Protected Route component
-const ProtectedRoute: React.FC<{ children: React.ReactNode; user: User | null; loading: boolean }> = ({ 
-  children, 
-  user, 
-  loading 
+const ProtectedRoute: React.FC<{ children: React.ReactNode; user: User | null; loading: boolean }> = ({
+  children,
+  user,
+  loading
 }) => {
   if (loading) {
     return (
@@ -24,19 +25,19 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; user: User | null; l
       </div>
     );
   }
-  
+ 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-  
+ 
   return <>{children}</>;
 };
 
 // Public Route component (redirects to dashboard if already logged in)
-const PublicRoute: React.FC<{ children: React.ReactNode; user: User | null; loading: boolean }> = ({ 
-  children, 
-  user, 
-  loading 
+const PublicRoute: React.FC<{ children: React.ReactNode; user: User | null; loading: boolean }> = ({
+  children,
+  user,
+  loading
 }) => {
   if (loading) {
     return (
@@ -45,11 +46,11 @@ const PublicRoute: React.FC<{ children: React.ReactNode; user: User | null; load
       </div>
     );
   }
-  
+ 
   if (user) {
     return <Navigate to="/" replace />;
   }
-  
+ 
   return <>{children}</>;
 };
 
@@ -82,26 +83,26 @@ function App() {
     <Router>
       <Routes>
         {/* Public routes */}
-        <Route 
-          path="/login" 
+        <Route
+          path="/login"
           element={
             <PublicRoute user={user} loading={loading}>
               <Login />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/register" 
+        <Route
+          path="/register"
           element={
             <PublicRoute user={user} loading={loading}>
               <Register />
             </PublicRoute>
-          } 
+          }
         />
 
         {/* Protected routes */}
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             <ProtectedRoute user={user} loading={loading}>
               <Layout />
@@ -113,6 +114,7 @@ function App() {
           <Route path="domains" element={<Domains />} />
           <Route path="emails" element={<Emails />} />
           <Route path="billing" element={<Billing />} />
+          <Route path="account" element={<Account />} />
         </Route>
 
         {/* Catch all route - redirect to login */}
