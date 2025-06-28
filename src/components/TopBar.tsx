@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, User, HelpCircle, ChevronDown, Bell } from 'lucide-react';
-import ProfileModal from './ProfileModal';
-import SupportModal from './SupportModal';
-import NotificationModal from './NotificationModal';
+import Profile from './Profile';
+import Support from './Support';
+import Notifications from './Notifications';
 
 interface TopBarProps {
   onMenuClick: () => void;
@@ -11,30 +11,38 @@ interface TopBarProps {
 const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
   const [currency, setCurrency] = useState('USD');
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showSupportModal, setShowSupportModal] = useState(false);
-  const [showNotificationModal, setShowNotificationModal] = useState(false);
-  
-  const profileRef = useRef<HTMLButtonElement>(null);
-  const supportRef = useRef<HTMLButtonElement>(null);
-  const notificationRef = useRef<HTMLButtonElement>(null);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showSupportDropdown, setShowSupportDropdown] = useState(false);
+  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (showProfileModal && profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setShowProfileModal(false);
+      const target = event.target as HTMLElement;
+      
+      // Close currency dropdown
+      if (showCurrencyDropdown && !target.closest('.currency-dropdown')) {
+        setShowCurrencyDropdown(false);
       }
-      if (showSupportModal && supportRef.current && !supportRef.current.contains(event.target as Node)) {
-        setShowSupportModal(false);
+      
+      // Close profile dropdown
+      if (showProfileDropdown && !target.closest('.profile-dropdown')) {
+        setShowProfileDropdown(false);
       }
-      if (showNotificationModal && notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
-        setShowNotificationModal(false);
+      
+      // Close support dropdown
+      if (showSupportDropdown && !target.closest('.support-dropdown')) {
+        setShowSupportDropdown(false);
+      }
+      
+      // Close notification dropdown
+      if (showNotificationDropdown && !target.closest('.notification-dropdown')) {
+        setShowNotificationDropdown(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showProfileModal, showSupportModal, showNotificationModal]);
+  }, [showCurrencyDropdown, showProfileDropdown, showSupportDropdown, showNotificationDropdown]);
 
   return (
     <>
@@ -60,7 +68,7 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <div className="relative">
+            <div className="relative currency-dropdown">
               <button
                 onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
                 className="flex items-center space-x-1 px-3 py-2 rounded-md hover:bg-gray-100 text-sm font-medium"
@@ -92,49 +100,43 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
               )}
             </div>
             
-            <div className="relative">
+            <div className="relative notification-dropdown">
               <button 
-                ref={notificationRef}
-                onClick={() => setShowNotificationModal(!showNotificationModal)}
+                onClick={() => setShowNotificationDropdown(!showNotificationDropdown)}
                 className="p-2 rounded-md hover:bg-gray-100 relative"
               >
                 <Bell className="w-5 h-5 text-gray-600" />
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
               </button>
-              <NotificationModal 
-                isOpen={showNotificationModal}
-                onClose={() => setShowNotificationModal(false)}
-                anchorRef={notificationRef}
+              <Notifications 
+                isOpen={showNotificationDropdown}
+                onClose={() => setShowNotificationDropdown(false)}
               />
             </div>
             
-            <div className="relative">
+            <div className="relative support-dropdown">
               <button 
-                ref={supportRef}
-                onClick={() => setShowSupportModal(!showSupportModal)}
+                onClick={() => setShowSupportDropdown(!showSupportDropdown)}
                 className="p-2 rounded-md hover:bg-gray-100"
               >
                 <HelpCircle className="w-5 h-5 text-gray-600" />
               </button>
-              <SupportModal 
-                isOpen={showSupportModal}
-                onClose={() => setShowSupportModal(false)}
-                anchorRef={supportRef}
+              <Support 
+                isOpen={showSupportDropdown}
+                onClose={() => setShowSupportDropdown(false)}
               />
             </div>
             
-            <div className="relative">
+            <div className="relative profile-dropdown">
               <button 
-                ref={profileRef}
-                onClick={() => setShowProfileModal(!showProfileModal)}
+                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
                 className="p-2 rounded-md hover:bg-gray-100"
               >
                 <User className="w-5 h-5 text-gray-600" />
               </button>
-              <ProfileModal 
-                isOpen={showProfileModal}
-                onClose={() => setShowProfileModal(false)}
-                anchorRef={profileRef}
+              <Profile 
+                isOpen={showProfileDropdown}
+                onClose={() => setShowProfileDropdown(false)}
               />
             </div>
           </div>

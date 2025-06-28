@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { User, Settings, LogOut, CreditCard } from 'lucide-react';
-import { supabase } from '../lib/supabase'; 
+import { supabase } from '../lib/supabase';
 
-interface ProfileModalProps {
+interface ProfileProps {
   isOpen: boolean;
   onClose: () => void;
-  anchorRef: React.RefObject<HTMLButtonElement>;
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef }) => {
-  const [position, setPosition] = useState({ top: 0, right: 0 });
+const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -18,7 +16,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef 
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
     };
-
     getCurrentUser();
 
     // Listen for auth changes
@@ -29,26 +26,19 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef 
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (isOpen && anchorRef.current) {
-      const rect = anchorRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + 8,
-        right: window.innerWidth - rect.right
-      });
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      onClose();
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
-  }, [isOpen, anchorRef]);
+  };
 
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed bg-white rounded-lg shadow-xl border border-gray-200 z-50 w-64"
-      style={{
-        top: `${position.top}px`,
-        right: `${position.right}px`
-      }}
-    >
+    <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 w-64">
       <div className="p-4">
         <div className="flex items-center space-x-4 mb-6">
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
@@ -56,10 +46,10 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef 
           </div>
           <div>
             <h3 className="font-semibold text-gray-900">
-              {user?.user_metadata?.full_name || 
-               user?.user_metadata?.name || 
+              {user?.user_metadata?.full_name ||
+               user?.user_metadata?.name ||
                user?.user_metadata?.display_name ||
-               (user?.email?.split('@')[0]) || 
+               (user?.email?.split('@')[0]) ||
                'User'}
             </h3>
             <p className="text-sm text-gray-600">{user?.email || 'No email'}</p>
@@ -75,7 +65,10 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef 
             <CreditCard className="w-4 h-4 text-gray-500" />
             <span className="text-gray-700">Billing & Payments</span>
           </button>
-          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left text-red-600">
+          <button 
+            onClick={handleSignOut}
+            className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left text-red-600"
+          >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>
           </button>
@@ -85,4 +78,4 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, anchorRef 
   );
 };
 
-export default ProfileModal;
+export default Profile;

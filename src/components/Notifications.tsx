@@ -1,25 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Bell, CheckCircle, AlertCircle, Info } from 'lucide-react';
 
-interface NotificationModalProps {
+interface NotificationsProps {
   isOpen: boolean;
   onClose: () => void;
-  anchorRef: React.RefObject<HTMLButtonElement>;
 }
 
-const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, anchorRef }) => {
-  const [position, setPosition] = useState({ top: 0, right: 0 });
-
-  useEffect(() => {
-    if (isOpen && anchorRef.current) {
-      const rect = anchorRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + 8,
-        right: window.innerWidth - rect.right
-      });
-    }
-  }, [isOpen, anchorRef]);
-
+const Notifications: React.FC<NotificationsProps> = ({ isOpen, onClose }) => {
   const notifications = [
     {
       id: 1,
@@ -62,13 +49,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed bg-white rounded-lg shadow-xl border border-gray-200 z-50 w-80"
-      style={{ 
-        top: `${position.top}px`, 
-        right: `${position.right}px` 
-      }}
-    >
+    <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 w-80">
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center space-x-2">
           <Bell className="w-5 h-5 text-gray-600" />
@@ -125,4 +106,4 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, onClose, 
   );
 };
 
-export default NotificationModal;
+export default Notifications;
