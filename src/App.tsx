@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Websites from './pages/Websites';
 import Domains from './pages/Domains';
 import Emails from './pages/Emails';
+import Create from './pages/Create';
 import Billing from './pages/Billing';
 import Account from './pages/Account';
 import Login from './components/Login';
@@ -115,6 +116,7 @@ function App() {
           <Route path="emails" element={<Emails />} />
           <Route path="billing" element={<Billing />} />
           <Route path="account" element={<Account />} />
+          <Route path="create" element={<Create />} />
         </Route>
 
         {/* Catch all route - redirect to login */}

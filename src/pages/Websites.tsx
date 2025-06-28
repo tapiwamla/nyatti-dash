@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Plus, ExternalLink, Settings } from 'lucide-react';
-import CreateWebsiteModal from '../components/CreateWebsiteModal';
+import { useNavigate } from 'react-router-dom';
 
 const Websites: React.FC = () => {
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const websites = [
     {
@@ -29,6 +29,10 @@ const Websites: React.FC = () => {
     }
   ];
 
+  const handleCreateWebsite = () => {
+    navigate('/create');
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -36,8 +40,8 @@ const Websites: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Websites</h1>
           <p className="text-gray-600 mt-1">Manage your websites and online stores</p>
         </div>
-        <button 
-          onClick={() => setIsCreateModalOpen(true)}
+        <button
+          onClick={handleCreateWebsite}
           className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
         >
           <Plus className="w-4 h-4" />
@@ -54,14 +58,14 @@ const Websites: React.FC = () => {
                 <p className="text-sm text-gray-600">{website.domain}</p>
               </div>
               <span className={`px-2 py-1 text-xs rounded-full ${
-                website.status === 'Active' 
-                  ? 'bg-green-100 text-green-800' 
+                website.status === 'Active'
+                  ? 'bg-green-100 text-green-800'
                   : 'bg-yellow-100 text-yellow-800'
               }`}>
                 {website.status}
               </span>
             </div>
-            
+           
             <div className="mb-4">
               <span className="text-xs text-gray-500 uppercase tracking-wide">{website.type}</span>
             </div>
@@ -79,12 +83,6 @@ const Websites: React.FC = () => {
           </div>
         ))}
       </div>
-
-      <CreateWebsiteModal 
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        initialType="website"
-      />
     </div>
   );
 };
