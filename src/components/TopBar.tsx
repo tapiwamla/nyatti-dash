@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, User, HelpCircle, ChevronDown, Bell } from 'lucide-react';
+import { Menu, User, HelpCircle, Bell } from 'lucide-react';
 import Profile from './Profile';
 import Support from './Support';
 import Notifications from './Notifications';
@@ -9,8 +9,6 @@ interface TopBarProps {
 }
 
 const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
-  const [currency, setCurrency] = useState('USD');
-  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showSupportDropdown, setShowSupportDropdown] = useState(false);
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
@@ -18,11 +16,6 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      
-      // Close currency dropdown
-      if (showCurrencyDropdown && !target.closest('.currency-dropdown')) {
-        setShowCurrencyDropdown(false);
-      }
       
       // Close profile dropdown
       if (showProfileDropdown && !target.closest('.profile-dropdown')) {
@@ -42,7 +35,7 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showCurrencyDropdown, showProfileDropdown, showSupportDropdown, showNotificationDropdown]);
+  }, [showProfileDropdown, showSupportDropdown, showNotificationDropdown]);
 
   return (
     <>
@@ -68,38 +61,6 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <div className="relative currency-dropdown">
-              <button
-                onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-                className="flex items-center space-x-1 px-3 py-2 rounded-md hover:bg-gray-100 text-sm font-medium"
-              >
-                <span>{currency}</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {showCurrencyDropdown && (
-                <div className="absolute right-0 mt-2 w-24 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                  <button
-                    onClick={() => {
-                      setCurrency('USD');
-                      setShowCurrencyDropdown(false);
-                    }}
-                    className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                  >
-                    USD
-                  </button>
-                  <button
-                    onClick={() => {
-                      setCurrency('KES');
-                      setShowCurrencyDropdown(false);
-                    }}
-                    className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50"
-                  >
-                    KES
-                  </button>
-                </div>
-              )}
-            </div>
-            
             <div className="relative notification-dropdown">
               <button 
                 onClick={() => setShowNotificationDropdown(!showNotificationDropdown)}
