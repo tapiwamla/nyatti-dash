@@ -1,10 +1,97 @@
-import React, { useState } from 'react';
-import { Plus, Globe, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Globe, ExternalLink, LogOut, User } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { User as SupabaseUser } from '@supabase/supabase-js';
 import CreateWebsiteModal from '../components/CreateWebsiteModal';
 
 const Dashboard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createModalType, setCreateModalType] = useState<'website' | 'shop'>('website');
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [userStats, setUserStats] = useState({
+    totalSites: 0,
+    activeSites: 0,
+    developmentSites: 0,
+    totalDomains: 0,
+    activeDomains: 0,
+    expiringSoon: 0
+  });
+
+  useEffect(() => {
+    // Get current user and set up auth listener
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+
+      if (user) {
+        // Fetch user's website and domain stats here
+        // This is where you'd query your websites and domains tables
+        await fetchUserStats(user.id);
+      }
+    };
+
+    getUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          setUser(session.user);
+          await fetchUserStats(session.user.id);
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setUserStats({
+            totalSites: 0,
+            activeSites: 0,
+            developmentSites: 0,
+            totalDomains: 0,
+            activeDomains: 0,
+            expiringSoon: 0
+          });
+        }
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchUserStats = async (userId: string) => {
+    try {
+      // Example queries - adjust based on your database schema
+      // const { data: websites } = await supabase
+      //   .from('websites')
+      //   .select('*')
+      //   .eq('user_id', userId);
+
+      // const { data: domains } = await supabase
+      //   .from('domains')
+      //   .select('*')
+      //   .eq('user_id', userId);
+
+      // For now, using mock data - replace with actual queries
+      setUserStats({
+        totalSites: 3,
+        activeSites: 2,
+        developmentSites: 1,
+        totalDomains: 2,
+        activeDomains: 2,
+        expiringSoon: 0
+      });
+    } catch (error) {
+      console.error('Error fetching user stats:', error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   const handleCreateWebsite = () => {
     setCreateModalType('website');
@@ -16,11 +103,57 @@ const Dashboard: React.FC = () => {
     setIsCreateModalOpen(true);
   };
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Please Sign In</h1>
+          <p className="text-gray-600">You need to be signed in to access the dashboard.</p>
+        </div>
+        <button
+          onClick={() => window.location.href = '/login'}
+          className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          Go to Login
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your websites.</p>
+      {/* Header with user info and logout */}
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-600 mt-1">
+            Welcome back, {user.email}! Here's what's happening with your websites.
+          </p>
+        </div>
+        
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 text-sm text-gray-600">
+            <User className="w-4 h-4" />
+            <span>{user.email}</span>
+          </div>
+          <button
+            onClick={handleSignOut}
+            className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sign Out</span>
+          </button>
+        </div>
       </div>
 
       {/* Quick Actions */}
@@ -65,15 +198,15 @@ const Dashboard: React.FC = () => {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Sites</span>
-              <span className="font-semibold text-gray-900">3</span>
+              <span className="font-semibold text-gray-900">{userStats.totalSites}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Active</span>
-              <span className="font-semibold text-green-600">2</span>
+              <span className="font-semibold text-green-600">{userStats.activeSites}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">In Development</span>
-              <span className="font-semibold text-yellow-600">1</span>
+              <span className="font-semibold text-yellow-600">{userStats.developmentSites}</span>
             </div>
           </div>
         </div>
@@ -86,15 +219,15 @@ const Dashboard: React.FC = () => {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Domains</span>
-              <span className="font-semibold text-gray-900">2</span>
+              <span className="font-semibold text-gray-900">{userStats.totalDomains}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Active</span>
-              <span className="font-semibold text-green-600">2</span>
+              <span className="font-semibold text-green-600">{userStats.activeDomains}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Expiring Soon</span>
-              <span className="font-semibold text-orange-600">0</span>
+              <span className="font-semibold text-orange-600">{userStats.expiringSoon}</span>
             </div>
           </div>
         </div>
