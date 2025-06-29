@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Check, CreditCard, Globe, ShoppingCart, Star, Users, Shield, Zap } from 'lucide-react';
-import { usePaystack } from '../hooks/usePaystack'; // ✅ Import custom Paystack hook
+import {
+  ArrowLeft,
+  Check,
+  CreditCard,
+  Globe,
+  ShoppingCart,
+  Shield,
+  Star,
+  Zap,
+} from 'lucide-react';
+import { usePaystack } from '../hooks/usePaystack';
 
 const ChoosePlan: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -8,12 +17,11 @@ const ChoosePlan: React.FC = () => {
   const [paymentComplete, setPaymentComplete] = useState(false);
 
   const formatKES = (amount: number) =>
-  new Intl.NumberFormat('en-KE', {
-    style: 'currency',
-    currency: 'KES',
-    minimumFractionDigits: 0,
-  }).format(amount);
-
+    new Intl.NumberFormat('en-KE', {
+      style: 'currency',
+      currency: 'KES',
+      minimumFractionDigits: 0,
+    }).format(amount);
 
   const plans = [
     {
@@ -30,9 +38,9 @@ const ChoosePlan: React.FC = () => {
         'Email Support',
         'SEO Optimization Tools',
         'Mobile Responsive Design',
-        'Basic Analytics'
+        'Basic Analytics',
       ],
-      popular: false
+      popular: false,
     },
     {
       id: 'ecommerce',
@@ -50,11 +58,13 @@ const ChoosePlan: React.FC = () => {
         'Shipping Calculator',
         'Tax Management',
         'Advanced Analytics',
-        'Priority Support'
+        'Priority Support',
       ],
-      popular: true
-    }
+      popular: true,
+    },
   ];
+
+  const selectedPlanDetails = plans.find((plan) => plan.id === selectedPlan);
 
   const handlePlanSelect = (planId: 'website' | 'ecommerce') => {
     setSelectedPlan(planId);
@@ -67,9 +77,6 @@ const ChoosePlan: React.FC = () => {
     }
   };
 
-  const selectedPlanDetails = plans.find(plan => plan.id === selectedPlan);
-
-  // ✅ Use Paystack hook
   const payNow = usePaystack({
     email: 'user@example.com', // Replace with actual user email
     amount: selectedPlanDetails?.price || 0,
@@ -78,12 +85,13 @@ const ChoosePlan: React.FC = () => {
       setCurrentStep(2);
     },
     onClose: () => {
-      console.log('Payment modal closed');
-    }
+      alert('Payment was not completed. Please try again to proceed.');
+    },
   });
 
   return (
     <div className="space-y-6">
+      {/* Step header */}
       <div className="flex items-center space-x-4">
         {currentStep > 1 && (
           <button
@@ -96,27 +104,39 @@ const ChoosePlan: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Create New Website</h1>
           <p className="text-gray-600 mt-1">
-            {currentStep === 1 ? 'Choose your website type and features' : 'Configure your new website'}
+            {currentStep === 1
+              ? 'Choose your website type and features'
+              : 'Configure your new website'}
           </p>
         </div>
       </div>
 
+      {/* Step indicator */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+            }`}
+          >
             {currentStep > 1 ? <Check className="w-4 h-4" /> : '1'}
           </div>
           <span className="ml-2 text-sm font-medium text-gray-900">Choose Plan</span>
         </div>
         <div className="w-16 h-0.5 bg-gray-200"></div>
         <div className="flex items-center">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+            }`}
+          >
             2
           </div>
           <span className="ml-2 text-sm font-medium text-gray-600">Setup Website</span>
         </div>
       </div>
 
+      {/* Step 1: Choose a plan */}
       {currentStep === 1 && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
@@ -127,7 +147,11 @@ const ChoosePlan: React.FC = () => {
               return (
                 <div
                   key={plan.id}
-                  className={`relative bg-white rounded-lg border-2 p-4 cursor-pointer transition-all ${isSelected ? 'border-primary shadow-lg' : 'border-gray-200 hover:border-gray-300 hover:shadow-md'}`}
+                  className={`relative bg-white rounded-lg border-2 p-4 cursor-pointer transition-all ${
+                    isSelected
+                      ? 'border-primary shadow-lg'
+                      : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                  }`}
                   onClick={() => handlePlanSelect(plan.id as 'website' | 'ecommerce')}
                 >
                   {plan.popular && (
@@ -141,7 +165,13 @@ const ChoosePlan: React.FC = () => {
 
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-2">
-                      <div className={`p-2 rounded-lg ${isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          isSelected
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100 text-gray-600'
+                        }`}
+                      >
                         <IconComponent className="w-5 h-5" />
                       </div>
                       <div>
@@ -150,7 +180,9 @@ const ChoosePlan: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xl font-bold text-gray-900">{formatKES(plan.price)}</div>
+                      <div className="text-xl font-bold text-gray-900">
+                        {formatKES(plan.price)}
+                      </div>
                       <div className="text-xs text-gray-600">per year</div>
                     </div>
                   </div>
@@ -193,7 +225,8 @@ const ChoosePlan: React.FC = () => {
         </div>
       )}
 
-      {currentStep === 2 && !paymentComplete && (
+      {/* Step 2: Payment */}
+      {currentStep === 2 && !paymentComplete && selectedPlanDetails && (
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
@@ -206,8 +239,10 @@ const ChoosePlan: React.FC = () => {
 
             <div className="space-y-4 mb-6">
               <div className="flex justify-between">
-                <span className="text-gray-700">{selectedPlanDetails?.name}</span>
-                <span className="font-medium">${selectedPlanDetails?.price}</span>
+                <span className="text-gray-700">{selectedPlanDetails.name}</span>
+                <span className="font-medium">
+                  {formatKES(selectedPlanDetails.price)}
+                </span>
               </div>
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Billing Period</span>
@@ -216,7 +251,7 @@ const ChoosePlan: React.FC = () => {
               <hr />
               <div className="flex justify-between font-semibold text-lg">
                 <span>Total</span>
-                <span>${selectedPlanDetails?.price}/year</span>
+                <span>{formatKES(selectedPlanDetails.price)}/year</span>
               </div>
             </div>
 
@@ -229,12 +264,13 @@ const ChoosePlan: React.FC = () => {
             </button>
 
             <p className="text-xs text-gray-500 text-center mt-3">
-              By proceeding, you agree to our Terms of Service and Privacy Policy
+              By proceeding, you agree to our Terms of Service and Privacy Policy.
             </p>
           </div>
         </div>
       )}
 
+      {/* Step 2: Payment Successful */}
       {currentStep === 2 && paymentComplete && (
         <div className="bg-white rounded-lg border border-gray-200 p-8 text-center max-w-2xl mx-auto">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
