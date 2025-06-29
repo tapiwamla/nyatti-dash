@@ -16,7 +16,9 @@ const ChoosePlan: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<'website' | 'ecommerce' | null>(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [subdomain, setSubdomain] = useState('');
+  const [websiteName, setWebsiteName] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
 
   const formatKES = (amount: number) =>
     new Intl.NumberFormat('en-KE', {
@@ -92,20 +94,26 @@ const ChoosePlan: React.FC = () => {
   });
 
   const handleActivate = async () => {
-    if (!subdomain.trim()) return;
+    if (!subdomain.trim() || !websiteName.trim()) return;
     setSubmitting(true);
 
     try {
       // 👇 Replace this with your Supabase or API logic
       console.log('Saving website to database...', {
+        websiteName,
         subdomain,
         plan: selectedPlan,
       });
 
       setTimeout(() => {
-        alert(`Your site ${subdomain}.nyatti.co has been created!`);
-        // Redirect or update UI
+        setShowSuccessToast(true);
         setSubmitting(false);
+        
+        // Hide toast after 5 seconds
+        setTimeout(() => {
+          setShowSuccessToast(false);
+          // Redirect or update UI here
+        }, 5000);
       }, 1500);
     } catch (err) {
       alert('Failed to activate website.');
@@ -290,53 +298,103 @@ const ChoosePlan: React.FC = () => {
         </div>
       )}
 
-      {/* Step 2: Payment Complete + Subdomain Setup */}
+      {/* Step 2: Payment Complete + Subdomain Setup - Horizontal Layout */}
       {currentStep === 2 && paymentComplete && (
-        <div className="bg-white rounded-lg border border-gray-200 p-8 max-w-xl mx-auto w-full">
-          <div className="flex flex-col h-[calc(100vh-6rem)] justify-center">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8 text-green-600" />
+        <div className="bg-white rounded-lg border border-gray-200 p-6 max-w-4xl mx-auto">
+          <div className="space-y-6">
+            {/* Success message and subdomain input on same level */}
+            <div className="flex items-start gap-8">
+              {/* Left side - Success message */}
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Check className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Payment Successful!</h2>
+                  <p className="text-gray-600 text-sm">Choose a subdomain to activate your website</p>
+                </div>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful</h2>
-              <p className="text-gray-600 mb-6">
-                Now let’s activate your website by choosing a subdomain.
-              </p>
+
+              {/* Right side - Website name and subdomain inputs */}
+              <div className="flex-1 space-y-4">
+                {/* Website Name */}
+                <div>
+                  <label htmlFor="websiteName" className="block text-sm font-medium text-gray-700 mb-2">
+                    Website Name:
+                  </label>
+                  <input
+                    id="websiteName"
+                    type="text"
+                    placeholder="My Awesome Website"
+                    className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
+                    value={websiteName}
+                    onChange={(e) => setWebsiteName(e.target.value)}
+                  />
+                </div>
+
+                {/* Subdomain */}
+                <div>
+                  <label htmlFor="subdomain" className="block text-sm font-medium text-gray-700 mb-2">
+                    Subdomain:
+                  </label>
+                  <div className="flex max-w-sm">
+                    <input
+                      id="subdomain"
+                      type="text"
+                      placeholder="yourname"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
+                      value={subdomain}
+                      onChange={(e) => setSubdomain(e.target.value.toLowerCase())}
+                    />
+                    <span className="px-3 py-2 bg-gray-50 border border-l-0 border-gray-300 rounded-r-lg text-gray-600 text-sm flex items-center h-10">
+                      .nyatti.co
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Available at: <strong>{subdomain || 'yourname'}.nyatti.co</strong>
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="w-full">
-              <label htmlFor="subdomain" className="block text-sm font-medium text-gray-700 mb-2">
-                Choose a subdomain:
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  id="subdomain"
-                  type="text"
-                  placeholder="yourname"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  value={subdomain}
-                  onChange={(e) => setSubdomain(e.target.value.toLowerCase())}
-                />
-                <span className="text-gray-600 text-sm">.nyatti.co</span>
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                Your site will be accessible at <strong>{subdomain || 'yourname'}.nyatti.co</strong>
-              </p>
-            </div>
-
-            <div className="mt-6 text-center">
+            {/* Activate button on its own level */}
+            <div>
               <button
-                disabled={!subdomain || submitting}
+                disabled={!subdomain || !websiteName || submitting}
                 onClick={handleActivate}
                 className={`bg-primary ${
-                  !subdomain || submitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
-                } text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center mx-auto`}
+                  !subdomain || !websiteName || submitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+                } text-white px-6 py-2 rounded-lg font-semibold flex items-center space-x-2 transition-colors`}
               >
-                <Zap className="w-4 h-4 mr-2" />
-                <span>{submitting ? 'Activating...' : 'Activate My Website'}</span>
+                <Zap className="w-4 h-4" />
+                <span>{submitting ? 'Activating...' : 'Activate Website'}</span>
               </button>
             </div>
           </div>
+
+          {/* Success Toast */}
+          {showSuccessToast && (
+            <div className="fixed top-4 right-4 bg-white border border-green-200 rounded-lg shadow-lg p-4 flex items-center space-x-3 z-50 animate-in slide-in-from-right duration-300">
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <Check className="w-5 h-5 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900">Website Created Successfully!</h4>
+                <p className="text-sm text-gray-600">
+                  <strong>{websiteName}</strong> is now live at{' '}
+                  <span className="font-medium text-primary">{subdomain}.nyatti.co</span>
+                </p>
+              </div>
+              <button
+                onClick={() => setShowSuccessToast(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
