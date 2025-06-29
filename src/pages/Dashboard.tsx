@@ -113,8 +113,8 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleCreateWebsite = () => {
-    navigate('/create');
+  const handleChoosePlan = () => {
+    navigate('/choose-plan');
   };
 
   // Show loading state
@@ -162,7 +162,7 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
         <button 
-          onClick={handleCreateWebsite}
+          onClick={handleChoosePlan}
           className="inline-flex items-center space-x-2 px-6 py-3 bg-[#16876b] text-white rounded-xl hover:bg-[#16876b]/90 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
         >
           <Plus className="w-5 h-5" />
@@ -298,7 +298,7 @@ const Dashboard: React.FC = () => {
               No coding experience required – just bring your ideas to life.
             </p>
             <button 
-              onClick={handleCreateWebsite}
+              onClick={handleChoosePlan}
               className="inline-flex items-center space-x-4 px-10 py-5 bg-[#16876b] text-white rounded-2xl hover:bg-[#16876b]/90 transition-all duration-200 shadow-2xl hover:shadow-3xl text-xl font-semibold transform hover:-translate-y-1"
             >
               <Plus className="w-7 h-7" />

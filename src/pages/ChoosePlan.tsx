@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Check, CreditCard, Globe, ShoppingCart, Star, Users, Shield, Zap } from 'lucide-react';
 import { usePaystack } from '../hooks/usePaystack'; // ✅ Import custom Paystack hook
 
-const CreateWebsite: React.FC = () => {
+const ChoosePlan: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPlan, setSelectedPlan] = useState<'website' | 'ecommerce' | null>(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
@@ -273,4 +273,4 @@ const CreateWebsite: React.FC = () => {
   );
 };
 
-export default CreateWebsite;
+export default ChoosePlan;
