@@ -15,6 +15,8 @@ const ChoosePlan: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPlan, setSelectedPlan] = useState<'website' | 'ecommerce' | null>(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
+  const [subdomain, setSubdomain] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const formatKES = (amount: number) =>
     new Intl.NumberFormat('en-KE', {
@@ -89,9 +91,31 @@ const ChoosePlan: React.FC = () => {
     },
   });
 
+  const handleActivate = async () => {
+    if (!subdomain.trim()) return;
+    setSubmitting(true);
+
+    try {
+      // 👇 Replace this with your Supabase or API logic
+      console.log('Saving website to database...', {
+        subdomain,
+        plan: selectedPlan,
+      });
+
+      setTimeout(() => {
+        alert(`Your site ${subdomain}.nyatti.co has been created!`);
+        // Redirect or update UI
+        setSubmitting(false);
+      }, 1500);
+    } catch (err) {
+      alert('Failed to activate website.');
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Step header */}
+      {/* Header */}
       <div className="flex items-center space-x-4">
         {currentStep > 1 && (
           <button
@@ -106,12 +130,12 @@ const ChoosePlan: React.FC = () => {
           <p className="text-gray-600 mt-1">
             {currentStep === 1
               ? 'Choose your website type and features'
-              : 'Configure your new website'}
+              : 'Activate your new website'}
           </p>
         </div>
       </div>
 
-      {/* Step indicator */}
+      {/* Step tracker */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
           <div
@@ -203,10 +227,6 @@ const ChoosePlan: React.FC = () => {
                       )}
                     </div>
                   </div>
-
-                  {isSelected && (
-                    <div className="absolute inset-0 bg-primary bg-opacity-5 rounded-lg pointer-events-none"></div>
-                  )}
                 </div>
               );
             })}
@@ -270,39 +290,53 @@ const ChoosePlan: React.FC = () => {
         </div>
       )}
 
-      {/* Step 2: Payment Successful */}
+      {/* Step 2: Payment Complete + Subdomain Setup */}
       {currentStep === 2 && paymentComplete && (
-        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center max-w-2xl mx-auto">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Check className="w-8 h-8 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
-          <p className="text-gray-600 mb-6">
-            Your {selectedPlanDetails?.name.toLowerCase()} plan has been activated. Let's set up your website.
-          </p>
+        <div className="bg-white rounded-lg border border-gray-200 p-8 max-w-xl mx-auto w-full">
+          <div className="flex flex-col h-[calc(100vh-6rem)] justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful</h2>
+              <p className="text-gray-600 mb-6">
+                Now let’s activate your website by choosing a subdomain.
+              </p>
+            </div>
 
-          <div className="bg-gray-50 rounded-lg p-6 mb-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Next Steps:</h3>
-            <div className="space-y-3 text-left">
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs">1</div>
-                <span className="text-gray-700">Choose your domain name</span>
+            <div className="w-full">
+              <label htmlFor="subdomain" className="block text-sm font-medium text-gray-700 mb-2">
+                Choose a subdomain:
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="subdomain"
+                  type="text"
+                  placeholder="yourname"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  value={subdomain}
+                  onChange={(e) => setSubdomain(e.target.value.toLowerCase())}
+                />
+                <span className="text-gray-600 text-sm">.nyatti.co</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs">2</div>
-                <span className="text-gray-500">Select your website template</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs">3</div>
-                <span className="text-gray-500">Configure your settings</span>
-              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Your site will be accessible at <strong>{subdomain || 'yourname'}.nyatti.co</strong>
+              </p>
+            </div>
+
+            <div className="mt-6 text-center">
+              <button
+                disabled={!subdomain || submitting}
+                onClick={handleActivate}
+                className={`bg-primary ${
+                  !subdomain || submitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+                } text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center mx-auto`}
+              >
+                <Zap className="w-4 h-4 mr-2" />
+                <span>{submitting ? 'Activating...' : 'Activate My Website'}</span>
+              </button>
             </div>
           </div>
-
-          <button className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold flex items-center space-x-2 mx-auto transition-colors">
-            <Zap className="w-4 h-4" />
-            <span>Continue Website Setup</span>
-          </button>
         </div>
       )}
     </div>
