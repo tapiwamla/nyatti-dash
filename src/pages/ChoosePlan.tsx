@@ -300,7 +300,7 @@ const ChoosePlan: React.FC = () => {
 
       {/* Step 2: Payment Complete + Subdomain Setup - Horizontal Layout */}
       {currentStep === 2 && paymentComplete && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6 max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg border border-gray-200 px-6 py-8 max-w-xl mx-auto w-full sm:px-8">
           <div className="space-y-6">
             {/* Title, Subtext, and Icon on One Level */}
             <div className="flex items-start gap-8">
