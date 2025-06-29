@@ -302,7 +302,7 @@ const ChoosePlan: React.FC = () => {
       {currentStep === 2 && paymentComplete && (
         <div className="bg-white rounded-lg border border-gray-200 p-6 max-w-4xl mx-auto">
           <div className="space-y-6">
-            {/* Success message and subdomain input on same level */}
+            {/* Title, Subtext, and Icon on One Level */}
             <div className="flex items-start gap-8">
               {/* Left side - Success message */}
               <div className="flex items-center space-x-4">
@@ -314,50 +314,50 @@ const ChoosePlan: React.FC = () => {
                   <p className="text-gray-600 text-sm">Choose a subdomain to activate your website</p>
                 </div>
               </div>
+            </div>
 
-              {/* Right side - Website name and subdomain inputs */}
-              <div className="flex-1 space-y-4">
-                {/* Website Name */}
-                <div>
-                  <label htmlFor="websiteName" className="block text-sm font-medium text-gray-700 mb-2">
-                    Website Name:
-                  </label>
+            {/* Forms on Another Level */}
+            <div className="flex-1 space-y-4">
+              {/* Website Name */}
+              <div>
+                <label htmlFor="websiteName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Website Name:
+                </label>
+                <input
+                  id="websiteName"
+                  type="text"
+                  placeholder="My Awesome Website"
+                  className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
+                  value={websiteName}
+                  onChange={(e) => setWebsiteName(e.target.value)}
+                />
+              </div>
+
+              {/* Subdomain */}
+              <div>
+                <label htmlFor="subdomain" className="block text-sm font-medium text-gray-700 mb-2">
+                  Subdomain:
+                </label>
+                <div className="flex max-w-sm">
                   <input
-                    id="websiteName"
+                    id="subdomain"
                     type="text"
-                    placeholder="My Awesome Website"
-                    className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
-                    value={websiteName}
-                    onChange={(e) => setWebsiteName(e.target.value)}
+                    placeholder="yourname"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
+                    value={subdomain}
+                    onChange={(e) => setSubdomain(e.target.value.toLowerCase())}
                   />
+                  <span className="px-3 py-2 bg-gray-50 border border-l-0 border-gray-300 rounded-r-lg text-gray-600 text-sm flex items-center h-10">
+                    .nyatti.co
+                  </span>
                 </div>
-
-                {/* Subdomain */}
-                <div>
-                  <label htmlFor="subdomain" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subdomain:
-                  </label>
-                  <div className="flex max-w-sm">
-                    <input
-                      id="subdomain"
-                      type="text"
-                      placeholder="yourname"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
-                      value={subdomain}
-                      onChange={(e) => setSubdomain(e.target.value.toLowerCase())}
-                    />
-                    <span className="px-3 py-2 bg-gray-50 border border-l-0 border-gray-300 rounded-r-lg text-gray-600 text-sm flex items-center h-10">
-                      .nyatti.co
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Available at: <strong>{subdomain || 'yourname'}.nyatti.co</strong>
-                  </p>
-                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Available at: <strong>{subdomain || 'yourname'}.nyatti.co</strong>
+                </p>
               </div>
             </div>
 
-            {/* Activate button on its own level */}
+            {/* Button on the Third Level */}
             <div>
               <button
                 disabled={!subdomain || !websiteName || submitting}
