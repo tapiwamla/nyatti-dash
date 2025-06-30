@@ -4,7 +4,7 @@ import { supabase } from './lib/supabase';
 import { User } from '@supabase/supabase-js';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import Websites from './pages/Websites';
+import Shops from './pages/Shops';
 import Domains from './pages/Domains';
 import Emails from './pages/Emails';
 import ChoosePlan from './pages/ChoosePlan';
@@ -111,7 +111,7 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
-          <Route path="websites" element={<Websites />} />
+          <Route path="shops" element={<Shops />} />
           <Route path="domains" element={<Domains />} />
           <Route path="emails" element={<Emails />} />
           <Route path="billing" element={<Billing />} />

@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
-  Globe,
+  ShoppingCart,
   Mail,
   CreditCard,
   X,
@@ -18,7 +18,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
     { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/websites', icon: Globe, label: 'Websites' },
+    { to: '/shops', icon: ShoppingCart, label: 'Shops' },
     { to: '/domains', icon: ExternalLink, label: 'Domains' },
     { to: '/emails', icon: Mail, label: 'Emails' },
     { to: '/account', icon: User, label: 'Account' },
