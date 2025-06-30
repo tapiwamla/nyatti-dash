@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  LayoutDashboard,
   ShoppingCart,
   CreditCard,
   X,
   User,
-  Grid3x3
+  PieChart,
+  Tag
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -16,9 +16,9 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
-    { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/', icon: PieChart, label: 'Dashboard' },
     { to: '/shops', icon: ShoppingCart, label: 'Shops' },
-    { to: '/plans', icon: Grid3x3, label: 'Plans' },
+    { to: '/plans', icon: Tag, label: 'Plans' },
     { to: '/account', icon: User, label: 'Account' },
     { to: '/billing', icon: CreditCard, label: 'Billing' },
   ];
