@@ -83,7 +83,6 @@ const Plans: React.FC = () => {
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      setPaymentComplete(false);
     }
   };
 
@@ -92,7 +91,7 @@ const Plans: React.FC = () => {
     amount: selectedPlanDetails?.price || 0,
     onSuccess: () => {
       setPaymentComplete(true);
-      setCurrentStep(2);
+      setCurrentStep(3);
     },
     onClose: () => {
       alert('Payment was not completed. Please try again to proceed.');
@@ -104,7 +103,6 @@ const Plans: React.FC = () => {
     setSubmitting(true);
 
     try {
-      // 👇 Replace this with your Supabase or API logic
       console.log('Saving shop to database...', {
         shopName,
         subdomain,
@@ -114,12 +112,7 @@ const Plans: React.FC = () => {
       setTimeout(() => {
         setShowSuccessToast(true);
         setSubmitting(false);
-        
-        // Hide toast after 5 seconds
-        setTimeout(() => {
-          setShowSuccessToast(false);
-          // Redirect or update UI here
-        }, 5000);
+        setTimeout(() => setShowSuccessToast(false), 5000);
       }, 1500);
     } catch (err) {
       alert('Failed to activate shop.');
@@ -140,41 +133,39 @@ const Plans: React.FC = () => {
           </button>
         )}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Choose Plan</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Shop Setup</h1>
           <p className="text-gray-600 mt-1">
             {currentStep === 1
-              ? 'Choose your shop plan and features'
-              : 'Activate your new online shop'}
+              ? 'Choose your shop plan'
+              : currentStep === 2
+              ? 'Complete your payment'
+              : 'Finish setting up your shop'}
           </p>
         </div>
       </div>
 
-      {/* Step tracker */}
+      {/* Step Tracker */}
       <div className="flex items-center space-x-4">
-        <div className="flex items-center">
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
-            }`}
-          >
-            {currentStep > 1 ? <Check className="w-4 h-4" /> : '1'}
-          </div>
-          <span className="ml-2 text-sm font-medium text-gray-900">Choose Plan</span>
-        </div>
-        <div className="w-16 h-0.5 bg-gray-200"></div>
-        <div className="flex items-center">
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
-            }`}
-          >
-            2
-          </div>
-          <span className="ml-2 text-sm font-medium text-gray-600">Setup Shop</span>
-        </div>
+        {[1, 2, 3].map((step) => (
+          <React.Fragment key={step}>
+            <div className="flex items-center">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  currentStep >= step ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+                }`}
+              >
+                {currentStep > step ? <Check className="w-4 h-4" /> : step}
+              </div>
+              <span className={`ml-2 text-sm font-medium ${currentStep >= step ? 'text-gray-900' : 'text-gray-600'}`}>
+                {step === 1 ? 'Choose Plan' : step === 2 ? 'Payment' : 'Setup Shop'}
+              </span>
+            </div>
+            {step < 3 && <div className="w-16 h-0.5 bg-gray-200"></div>}
+          </React.Fragment>
+        ))}
       </div>
 
-      {/* Step 1: Choose a plan */}
+      {/* Step 1 */}
       {currentStep === 1 && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto">
@@ -304,13 +295,11 @@ const Plans: React.FC = () => {
         </div>
       )}
 
-      {/* Step 2: Payment Complete + Subdomain Setup - Horizontal Layout */}
-      {currentStep === 2 && paymentComplete && (
-        <div className="bg-white rounded-lg border border-gray-200 px-6 py-8 max-w-3xl  w-full sm:px-8">
+      {/* Step 3: Setup Shop */}
+      {currentStep === 3 && paymentComplete && (
+        <div className="bg-white rounded-lg border border-gray-200 px-6 py-8 max-w-3xl w-full sm:px-8">
           <div className="space-y-6">
-            {/* Title, Subtext, and Icon on One Level */}
             <div className="flex items-start gap-8">
-              {/* Left side - Success message */}
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <Check className="w-6 h-6 text-green-600" />
@@ -322,9 +311,7 @@ const Plans: React.FC = () => {
               </div>
             </div>
 
-            {/* Forms on Another Level */}
             <div className="flex-1 space-y-4">
-              {/* Shop Name */}
               <div>
                 <label htmlFor="shopName" className="block text-sm font-medium text-gray-700 mb-2">
                   Shop Name:
@@ -339,7 +326,6 @@ const Plans: React.FC = () => {
                 />
               </div>
 
-              {/* Subdomain */}
               <div>
                 <label htmlFor="subdomain" className="block text-sm font-medium text-gray-700 mb-2">
                   Subdomain:
@@ -363,7 +349,6 @@ const Plans: React.FC = () => {
               </div>
             </div>
 
-            {/* Button on the Third Level */}
             <div>
               <button
                 disabled={!subdomain || !shopName || submitting}
@@ -378,7 +363,6 @@ const Plans: React.FC = () => {
             </div>
           </div>
 
-          {/* Success Toast */}
           {showSuccessToast && (
             <div className="fixed top-4 right-4 bg-white border border-green-200 rounded-lg shadow-lg p-4 flex items-center space-x-3 z-50 animate-in slide-in-from-right duration-300">
               <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
