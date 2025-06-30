@@ -140,7 +140,7 @@ const Plans: React.FC = () => {
           </button>
         )}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create New Shop</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Choose Plan</h1>
           <p className="text-gray-600 mt-1">
             {currentStep === 1
               ? 'Choose your shop plan and features'
