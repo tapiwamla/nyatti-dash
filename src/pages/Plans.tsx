@@ -177,7 +177,7 @@ const Plans: React.FC = () => {
       {/* Step 1: Choose a plan */}
       {currentStep === 1 && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto">
             {plans.map((plan) => {
               const IconComponent = plan.icon;
               const isSelected = selectedPlan === plan.id;
@@ -261,7 +261,7 @@ const Plans: React.FC = () => {
 
       {/* Step 2: Payment */}
       {currentStep === 2 && !paymentComplete && selectedPlanDetails && (
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-3xl">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Payment Summary</h3>
@@ -306,7 +306,7 @@ const Plans: React.FC = () => {
 
       {/* Step 2: Payment Complete + Subdomain Setup - Horizontal Layout */}
       {currentStep === 2 && paymentComplete && (
-        <div className="bg-white rounded-lg border border-gray-200 px-6 py-8 max-w-xl mx-auto w-full sm:px-8">
+        <div className="bg-white rounded-lg border border-gray-200 px-6 py-8 max-w-3xl  w-full sm:px-8">
           <div className="space-y-6">
             {/* Title, Subtext, and Icon on One Level */}
             <div className="flex items-start gap-8">
