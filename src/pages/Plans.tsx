@@ -3,20 +3,20 @@ import {
   ArrowLeft,
   Check,
   CreditCard,
-  Globe,
   ShoppingCart,
   Shield,
   Star,
   Zap,
+  Package,
 } from 'lucide-react';
 import { usePaystack } from '../hooks/usePaystack';
 
-const ChoosePlan: React.FC = () => {
+const Plans: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedPlan, setSelectedPlan] = useState<'website' | 'ecommerce' | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<'standard' | 'premium' | null>(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [subdomain, setSubdomain] = useState('');
-  const [websiteName, setWebsiteName] = useState('');
+  const [shopName, setShopName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
 
@@ -29,40 +29,46 @@ const ChoosePlan: React.FC = () => {
 
   const plans = [
     {
-      id: 'website',
-      name: 'Website',
-      price: 10000,
-      icon: Globe,
-      description: 'Perfect for personal portfolios, blogs, and business websites',
+      id: 'standard',
+      name: 'Standard Plan',
+      price: 15000,
+      icon: Package,
+      description: 'Perfect for small businesses and startups',
       features: [
-        'Custom WordPress Theme',
+        'Custom E-commerce Store',
+        'Up to 100 Products',
+        'Basic Payment Gateway',
         'SSL Certificate Included',
-        '10GB Storage Space',
+        '5GB Storage Space',
         'Free Domain for 1 Year',
         'Email Support',
-        'SEO Optimization Tools',
         'Mobile Responsive Design',
         'Basic Analytics',
+        'Social Media Integration',
       ],
       popular: false,
     },
     {
-      id: 'ecommerce',
-      name: 'E-commerce Shop',
-      price: 20000,
+      id: 'premium',
+      name: 'Premium Plan',
+      price: 30000,
       icon: ShoppingCart,
-      description: 'Complete online store solution with payment processing',
+      description: 'Complete solution for growing businesses',
       features: [
-        'WooCommerce Integration',
-        'Payment Gateway Setup',
-        'Product Management System',
-        'Inventory Tracking',
-        'Order Management',
-        'Customer Accounts',
-        'Shipping Calculator',
+        'Advanced E-commerce Store',
+        'Unlimited Products',
+        'Multiple Payment Gateways',
+        'Advanced Inventory Management',
+        'Order Management System',
+        'Customer Accounts & Wishlist',
+        'Advanced Shipping Calculator',
         'Tax Management',
-        'Advanced Analytics',
+        'Advanced Analytics & Reports',
         'Priority Support',
+        'Marketing Tools',
+        'Multi-currency Support',
+        'Abandoned Cart Recovery',
+        'SEO Optimization Tools',
       ],
       popular: true,
     },
@@ -70,7 +76,7 @@ const ChoosePlan: React.FC = () => {
 
   const selectedPlanDetails = plans.find((plan) => plan.id === selectedPlan);
 
-  const handlePlanSelect = (planId: 'website' | 'ecommerce') => {
+  const handlePlanSelect = (planId: 'standard' | 'premium') => {
     setSelectedPlan(planId);
   };
 
@@ -94,13 +100,13 @@ const ChoosePlan: React.FC = () => {
   });
 
   const handleActivate = async () => {
-    if (!subdomain.trim() || !websiteName.trim()) return;
+    if (!subdomain.trim() || !shopName.trim()) return;
     setSubmitting(true);
 
     try {
       // 👇 Replace this with your Supabase or API logic
-      console.log('Saving website to database...', {
-        websiteName,
+      console.log('Saving shop to database...', {
+        shopName,
         subdomain,
         plan: selectedPlan,
       });
@@ -116,7 +122,7 @@ const ChoosePlan: React.FC = () => {
         }, 5000);
       }, 1500);
     } catch (err) {
-      alert('Failed to activate website.');
+      alert('Failed to activate shop.');
       setSubmitting(false);
     }
   };
@@ -134,11 +140,11 @@ const ChoosePlan: React.FC = () => {
           </button>
         )}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create New Website</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Create New Shop</h1>
           <p className="text-gray-600 mt-1">
             {currentStep === 1
-              ? 'Choose your website type and features'
-              : 'Activate your new website'}
+              ? 'Choose your shop plan and features'
+              : 'Activate your new online shop'}
           </p>
         </div>
       </div>
@@ -164,7 +170,7 @@ const ChoosePlan: React.FC = () => {
           >
             2
           </div>
-          <span className="ml-2 text-sm font-medium text-gray-600">Setup Website</span>
+          <span className="ml-2 text-sm font-medium text-gray-600">Setup Shop</span>
         </div>
       </div>
 
@@ -184,7 +190,7 @@ const ChoosePlan: React.FC = () => {
                       ? 'border-primary shadow-lg'
                       : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
                   }`}
-                  onClick={() => handlePlanSelect(plan.id as 'website' | 'ecommerce')}
+                  onClick={() => handlePlanSelect(plan.id as 'standard' | 'premium')}
                 >
                   {plan.popular && (
                     <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
@@ -221,7 +227,7 @@ const ChoosePlan: React.FC = () => {
 
                   <div className="space-y-2">
                     <h4 className="font-medium text-gray-900 text-sm">Features:</h4>
-                    <div className="grid grid-cols-2 gap-1">
+                    <div className="grid grid-cols-1 gap-1">
                       {plan.features.slice(0, 8).map((feature, index) => (
                         <div key={index} className="flex items-center space-x-1">
                           <Check className="w-3 h-3 text-green-500 flex-shrink-0" />
@@ -229,7 +235,7 @@ const ChoosePlan: React.FC = () => {
                         </div>
                       ))}
                       {plan.features.length > 8 && (
-                        <div className="col-span-2 text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-gray-500 mt-1">
                           +{plan.features.length - 8} more features...
                         </div>
                       )}
@@ -311,25 +317,25 @@ const ChoosePlan: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">Payment Successful!</h2>
-                  <p className="text-gray-600 text-sm">Choose a subdomain to activate your website</p>
+                  <p className="text-gray-600 text-sm">Choose a subdomain to activate your shop</p>
                 </div>
               </div>
             </div>
 
             {/* Forms on Another Level */}
             <div className="flex-1 space-y-4">
-              {/* Website Name */}
+              {/* Shop Name */}
               <div>
-                <label htmlFor="websiteName" className="block text-sm font-medium text-gray-700 mb-2">
-                  Website Name:
+                <label htmlFor="shopName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Shop Name:
                 </label>
                 <input
-                  id="websiteName"
+                  id="shopName"
                   type="text"
-                  placeholder="My Awesome Website"
+                  placeholder="My Awesome Shop"
                   className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
-                  value={websiteName}
-                  onChange={(e) => setWebsiteName(e.target.value)}
+                  value={shopName}
+                  onChange={(e) => setShopName(e.target.value)}
                 />
               </div>
 
@@ -342,7 +348,7 @@ const ChoosePlan: React.FC = () => {
                   <input
                     id="subdomain"
                     type="text"
-                    placeholder="yourname"
+                    placeholder="yourshop"
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent h-10"
                     value={subdomain}
                     onChange={(e) => setSubdomain(e.target.value.toLowerCase())}
@@ -352,7 +358,7 @@ const ChoosePlan: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Available at: <strong>{subdomain || 'yourname'}.nyatti.co</strong>
+                  Available at: <strong>{subdomain || 'yourshop'}.nyatti.co</strong>
                 </p>
               </div>
             </div>
@@ -360,14 +366,14 @@ const ChoosePlan: React.FC = () => {
             {/* Button on the Third Level */}
             <div>
               <button
-                disabled={!subdomain || !websiteName || submitting}
+                disabled={!subdomain || !shopName || submitting}
                 onClick={handleActivate}
                 className={`bg-primary ${
-                  !subdomain || !websiteName || submitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+                  !subdomain || !shopName || submitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
                 } text-white px-6 py-2 rounded-lg font-semibold flex items-center space-x-2 transition-colors`}
               >
                 <Zap className="w-4 h-4" />
-                <span>{submitting ? 'Activating...' : 'Activate Website'}</span>
+                <span>{submitting ? 'Activating...' : 'Activate Shop'}</span>
               </button>
             </div>
           </div>
@@ -379,9 +385,9 @@ const ChoosePlan: React.FC = () => {
                 <Check className="w-5 h-5 text-green-600" />
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Website Created Successfully!</h4>
+                <h4 className="font-semibold text-gray-900">Shop Created Successfully!</h4>
                 <p className="text-sm text-gray-600">
-                  <strong>{websiteName}</strong> is now live at{' '}
+                  <strong>{shopName}</strong> is now live at{' '}
                   <span className="font-medium text-primary">{subdomain}.nyatti.co</span>
                 </p>
               </div>
@@ -401,4 +407,4 @@ const ChoosePlan: React.FC = () => {
   );
 };
 
-export default ChoosePlan;
+export default Plans;

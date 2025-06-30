@@ -5,7 +5,8 @@ import {
   ShoppingCart,
   CreditCard,
   X,
-  User
+  User,
+  Grid3x3
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -17,6 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
     { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/shops', icon: ShoppingCart, label: 'Shops' },
+    { to: '/plans', icon: Grid3x3, label: 'Plans' },
     { to: '/account', icon: User, label: 'Account' },
     { to: '/billing', icon: CreditCard, label: 'Billing' },
   ];
