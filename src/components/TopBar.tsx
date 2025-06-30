@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, User, HelpCircle, Bell } from 'lucide-react';
+import { Menu, User, HelpCircle, Bell, Plus } from 'lucide-react';
 import Profile from './Profile';
 import Support from './Support';
 import Notifications from './Notifications';
@@ -37,6 +37,10 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showProfileDropdown, showSupportDropdown, showNotificationDropdown]);
 
+  const handleCreateShop = () => {
+    window.location.href = '/templates';
+  };
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
@@ -61,6 +65,24 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
           </div>
 
           <div className="flex items-center space-x-4">
+            {/* CTA Button */}
+            <button
+              onClick={handleCreateShop}
+              className="hidden sm:flex items-center space-x-2 bg-red-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium border border-gray-200"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Create New Shop</span>
+            </button>
+            
+            {/* Mobile CTA Button */}
+            <button
+              onClick={handleCreateShop}
+              className="sm:hidden p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200"
+              title="Create Shop"
+            >
+              <Plus className="w-5 h-5" />
+            </button>
+
             <div className="relative notification-dropdown">
               <button 
                 onClick={() => setShowNotificationDropdown(!showNotificationDropdown)}
