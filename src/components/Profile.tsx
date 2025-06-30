@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Settings, LogOut, CreditCard } from 'lucide-react';
+import { User, UserCircle, LogOut, CreditCard } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface ProfileProps {
@@ -74,19 +74,19 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose }) => {
             onClick={handleSettingsClick}
             className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left"
           >
-            <Settings className="w-4 h-4 text-gray-500" />
-            <span className="text-gray-700">Account Settings</span>
+            <UserCircle className="w-4 h-4 text-gray-500" />
+            <span className="text-gray-700">Manage Profile</span>
           </button>
           <button
             onClick={handleBillingClick}
             className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left"
           >
             <CreditCard className="w-4 h-4 text-gray-500" />
-            <span className="text-gray-700">Billing & Payments</span>
+            <span className="text-gray-700">Manage Billing</span>
           </button>
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-left text-red-600"
+            className="w-full flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-red-50 text-left text-red-600 border border-red-200 hover:border-red-300"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>

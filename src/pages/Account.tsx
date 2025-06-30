@@ -160,7 +160,7 @@ const Account: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Account Settings</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Account Preferences</h1>
         <p className="text-gray-600 mt-1">
           Manage your account information and security settings.
         </p>
