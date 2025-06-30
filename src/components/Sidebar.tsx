@@ -3,10 +3,8 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   ShoppingCart,
-  Mail,
   CreditCard,
   X,
-  ExternalLink,
   User
 } from 'lucide-react';
 
@@ -19,8 +17,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
     { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/shops', icon: ShoppingCart, label: 'Shops' },
-    { to: '/domains', icon: ExternalLink, label: 'Domains' },
-    { to: '/emails', icon: Mail, label: 'Emails' },
     { to: '/account', icon: User, label: 'Account' },
     { to: '/billing', icon: CreditCard, label: 'Billing' },
   ];
