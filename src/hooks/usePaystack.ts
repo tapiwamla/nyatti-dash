@@ -1,4 +1,3 @@
-// src/hooks/usePaystack.ts
 import { usePaystackPayment } from 'react-paystack';
 
 interface UsePaystackArgs {
