@@ -12,7 +12,7 @@ import SuccessToast from '../components/create/SuccessToast';
 
 const Create: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null); // Changed from Template | null
   const [shopName, setShopName] = useState('');
   const [subdomain, setSubdomain] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<'standard' | 'premium' | null>(null);
@@ -109,7 +109,7 @@ const Create: React.FC = () => {
       console.log('Saving shop to database...', {
         shopName,
         subdomain,
-        template: selectedTemplate?.name,
+        template: selectedTemplate, // Now this is a string ID
         plan: selectedPlan,
       });
 
@@ -157,7 +157,7 @@ const Create: React.FC = () => {
       {currentStep === 1 && (
         <TemplateSelection
           selectedTemplate={selectedTemplate}
-          onTemplateSelect={(template) => setSelectedTemplate(template)}
+          onTemplateSelect={(templateId) => setSelectedTemplate(templateId)} // Changed parameter name
           onContinue={() => {
             if (selectedTemplate) {
               setCurrentStep(2);
