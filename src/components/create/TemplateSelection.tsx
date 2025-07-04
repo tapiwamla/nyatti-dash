@@ -6,6 +6,7 @@ import StepTracker from '../components/create/StepTracker';
 import PlanSelection from '../components/create/PlanSelection';
 import PaymentSummary from '../components/create/PaymentSummary';
 import ShopSetup from '../components/create/ShopSetup';
+import TemplateSelection from '../components/create/TemplateSelection';
 import SuccessToast from '../components/create/SuccessToast';
 
 const Create: React.FC = () => {
@@ -15,7 +16,7 @@ const Create: React.FC = () => {
   const [subdomain, setSubdomain] = useState('');
   const [shopName, setShopName] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
   const formatKES = (amount: number) =>
     new Intl.NumberFormat('en-KE', {
@@ -72,9 +73,10 @@ const Create: React.FC = () => {
   ];
 
   const steps = [
-    { id: 1, label: 'Setup Shop' },
-    { id: 2, label: 'Choose Plan' },
-    { id: 3, label: 'Payment' },
+    { id: 1, label: 'Choose Template' },
+    { id: 2, label: 'Setup Shop' },
+    { id: 3, label: 'Choose Plan' },
+    { id: 4, label: 'Payment' },
   ];
 
   const selectedPlanDetails = plans.find((plan) => plan.id === selectedPlan);
@@ -106,6 +108,7 @@ const Create: React.FC = () => {
         shopName,
         subdomain,
         plan: selectedPlan,
+        template: selectedTemplate,
       });
 
       setTimeout(() => {
@@ -135,8 +138,10 @@ const Create: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Shop Setup</h1>
           <p className="text-gray-600 mt-1">
             {currentStep === 1
-              ? 'Set up your shop details'
+              ? 'Choose a template for your shop'
               : currentStep === 2
+              ? 'Set up your shop details'
+              : currentStep === 3
               ? 'Choose your shop plan'
               : 'Complete your payment'}
           </p>
@@ -148,27 +153,36 @@ const Create: React.FC = () => {
 
       {/* Step Content */}
       {currentStep === 1 && (
+        <TemplateSelection
+          templates={templates}
+          selectedTemplate={selectedTemplate}
+          onTemplateSelect={setSelectedTemplate}
+          onContinue={() => setCurrentStep(2)}
+        />
+      )}
+
+      {currentStep === 2 && (
         <ShopSetup
           shopName={shopName}
           subdomain={subdomain}
           submitting={false}
           onShopNameChange={setShopName}
           onSubdomainChange={setSubdomain}
-          onActivate={() => setCurrentStep(2)}
+          onActivate={() => setCurrentStep(3)}
         />
       )}
 
-      {currentStep === 2 && (
+      {currentStep === 3 && (
         <PlanSelection
           plans={plans}
           selectedPlan={selectedPlan}
           onPlanSelect={setSelectedPlan}
-          onContinue={() => setCurrentStep(3)}
+          onContinue={() => setCurrentStep(4)}
           formatKES={formatKES}
         />
       )}
 
-      {currentStep === 3 && selectedPlanDetails && (
+      {currentStep === 4 && selectedPlanDetails && (
         <PaymentSummary
           selectedPlan={selectedPlanDetails}
           formatKES={formatKES}
