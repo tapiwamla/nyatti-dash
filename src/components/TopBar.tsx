@@ -59,7 +59,7 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
                 className="w-8 h-8 rounded-sm"
               />
               <h1 className="text-xl text-gray-900">
-                <span className="font-bold">Nyatti</span>
+                <span className="font-bold">Nyatti Cloud</span>
               </h1>
             </div>
           </div>
