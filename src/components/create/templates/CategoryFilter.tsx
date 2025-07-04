@@ -4,7 +4,7 @@ import { CategoryFilterProps } from '../../../types/Template';
 const CategoryFilter: React.FC<CategoryFilterProps> = ({ 
   categories, 
   selectedCategory, 
-  onCategorySelect 
+  onCategorySelect
 }) => {
   return (
     <div className="mb-8">

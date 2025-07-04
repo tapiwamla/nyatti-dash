@@ -27,7 +27,7 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = ({
           Choose Your Store Template
         </h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Select a professionally designed template that matches your business. 
+          Select a professionally designed template that matches your business.
           All templates are fully customizable and mobile-responsive.
         </p>
       </div>
@@ -53,9 +53,22 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = ({
           disabled={!selectedTemplate}
           className={`px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform ${
             selectedTemplate
-              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl hover:scale-105'
+              ? 'text-white hover:shadow-xl hover:scale-105 shadow-lg'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
+          style={selectedTemplate ? {
+            background: 'linear-gradient(135deg, #16876b 0%, #1a9b7a 100%)',
+          } : {}}
+          onMouseEnter={(e) => {
+            if (selectedTemplate) {
+              e.currentTarget.style.background = 'linear-gradient(135deg, #145a4f 0%, #16876b 100%)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (selectedTemplate) {
+              e.currentTarget.style.background = 'linear-gradient(135deg, #16876b 0%, #1a9b7a 100%)';
+            }
+          }}
         >
           {selectedTemplate ? 'Continue with Selected Template' : 'Select a Template to Continue'}
         </button>

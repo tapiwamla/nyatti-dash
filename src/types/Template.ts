@@ -19,15 +19,15 @@ export interface TemplateCategory {
 }
 
 export interface TemplateSelectionProps {
-  selectedTemplate: Template | null;
-  onTemplateSelect: (template: Template) => void;
+  selectedTemplate: string | null;
+  onTemplateSelect: (templateId: string) => void;
   onContinue: () => void;
 }
 
 export interface TemplateCardProps {
   template: Template;
   isSelected: boolean;
-  onSelect: (template: Template) => void;
+  onSelect: (templateId: string) => void;
 }
 
 export interface CategoryFilterProps {
