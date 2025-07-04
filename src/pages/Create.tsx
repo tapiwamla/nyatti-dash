@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import { ArrowLeft, Package, ShoppingCart } from 'lucide-react';
 import { usePaystack } from '../hooks/usePaystack';
 import { Plan } from '../types/Plans';
+import { Template } from '../types/Template';
 import StepTracker from '../components/create/StepTracker';
+import TemplateSelection from '../components/create/TemplateSelection';
+import ShopSetup from '../components/create/ShopSetup';
 import PlanSelection from '../components/create/PlanSelection';
 import PaymentSummary from '../components/create/PaymentSummary';
-import ShopSetup from '../components/create/ShopSetup';
 import SuccessToast from '../components/create/SuccessToast';
 
 const Create: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [shopName, setShopName] = useState('');
+  const [subdomain, setSubdomain] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<'standard' | 'premium' | null>(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
-  const [subdomain, setSubdomain] = useState('');
-  const [shopName, setShopName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
 
@@ -72,9 +75,10 @@ const Create: React.FC = () => {
   ];
 
   const steps = [
-    { id: 1, label: 'Setup Shop' },
-    { id: 2, label: 'Choose Plan' },
-    { id: 3, label: 'Payment' },
+    { id: 1, label: 'Choose Template' },
+    { id: 2, label: 'Setup Shop' },
+    { id: 3, label: 'Choose Plan' },
+    { id: 4, label: 'Payment' },
   ];
 
   const selectedPlanDetails = plans.find((plan) => plan.id === selectedPlan);
@@ -105,6 +109,7 @@ const Create: React.FC = () => {
       console.log('Saving shop to database...', {
         shopName,
         subdomain,
+        template: selectedTemplate?.name,
         plan: selectedPlan,
       });
 
@@ -132,11 +137,13 @@ const Create: React.FC = () => {
           </button>
         )}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Shop Setup</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Shop Creation</h1>
           <p className="text-gray-600 mt-1">
             {currentStep === 1
-              ? 'Set up your shop details'
+              ? 'Choose a starting template for your shop'
               : currentStep === 2
+              ? 'Set up your shop details'
+              : currentStep === 3
               ? 'Choose your shop plan'
               : 'Complete your payment'}
           </p>
@@ -148,27 +155,47 @@ const Create: React.FC = () => {
 
       {/* Step Content */}
       {currentStep === 1 && (
-        <ShopSetup
-          shopName={shopName}
-          subdomain={subdomain}
-          submitting={false}
-          onShopNameChange={setShopName}
-          onSubdomainChange={setSubdomain}
-          onActivate={() => setCurrentStep(2)}
+        <TemplateSelection
+          selectedTemplate={selectedTemplate}
+          onTemplateSelect={(template) => setSelectedTemplate(template)}
+          onContinue={() => {
+            if (selectedTemplate) {
+              setCurrentStep(2);
+            } else {
+              alert('Please select a template to continue.');
+            }
+          }}
         />
       )}
 
       {currentStep === 2 && (
+        <ShopSetup
+          shopName={shopName}
+          subdomain={subdomain}
+          submitting={submitting}
+          onShopNameChange={setShopName}
+          onSubdomainChange={setSubdomain}
+          onActivate={() => setCurrentStep(3)}
+        />
+      )}
+
+      {currentStep === 3 && (
         <PlanSelection
           plans={plans}
           selectedPlan={selectedPlan}
           onPlanSelect={setSelectedPlan}
-          onContinue={() => setCurrentStep(3)}
+          onContinue={() => {
+            if (selectedPlan) {
+              setCurrentStep(4);
+            } else {
+              alert('Please select a plan to continue.');
+            }
+          }}
           formatKES={formatKES}
         />
       )}
 
-      {currentStep === 3 && selectedPlanDetails && (
+      {currentStep === 4 && selectedPlanDetails && (
         <PaymentSummary
           selectedPlan={selectedPlanDetails}
           formatKES={formatKES}
