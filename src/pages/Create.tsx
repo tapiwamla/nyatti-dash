@@ -6,8 +6,8 @@ import { Template } from '../types/Template';
 import StepTracker from '../components/create/StepTracker';
 import TemplateSelection from '../components/create/templates/TemplateSelection';
 import ShopSetup from '../components/create/ShopSetup';
-import PlanSelection from '../components/create/PlanSelection';
-import PaymentSummary from '../components/create/PaymentSummary';
+import PlanSelection from '../components/create/plans/PlanSelection';
+import PaymentSummary from '../components/create/plans/PaymentSummary';
 import SuccessToast from '../components/create/SuccessToast';
 
 const Create: React.FC = () => {
