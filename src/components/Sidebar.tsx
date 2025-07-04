@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { to: '/', icon: PieChart, label: 'Dashboard' },
     { to: '/shops', icon: ShoppingCart, label: 'Shops' },
     { to: '/templates', icon: Layout, label: 'Templates' },
-    { to: '/plans', icon: Tag, label: 'Plans' },
+    { to: '/create', icon: Tag, label: 'Create' },
     { to: '/account', icon: User, label: 'Account' },
     { to: '/billing', icon: CreditCard, label: 'Billing' },
   ];

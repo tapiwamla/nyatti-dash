@@ -9,7 +9,7 @@ import Billing from './pages/Billing';
 import Account from './pages/Account';
 import Login from './components/Login';
 import Register from './components/Register';
-import Plans from './pages/Plans';
+import Create from './pages/Create';
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode; user: User | null; loading: boolean }> = ({
@@ -112,7 +112,7 @@ function App() {
           <Route path="shops" element={<Shops />} />
           <Route path="billing" element={<Billing />} />
           <Route path="account" element={<Account />} />
-          <Route path="plans" element={<Plans />} />
+          <Route path="create" element={<Create />} />
         </Route>
 
         {/* Catch all route - redirect to login */}
