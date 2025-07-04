@@ -1,6 +1,6 @@
 import React from 'react';
 import TemplateCard from './TemplateCard';
-import { Template } from '../../types/Template';
+import { Template } from '../../../types/Template';
 
 interface TemplateGridProps {
   templates: Template[];

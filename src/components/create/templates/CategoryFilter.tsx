@@ -1,5 +1,5 @@
 import React from 'react';
-import { CategoryFilterProps } from '../../types/Template';
+import { CategoryFilterProps } from '../../../types/Template';
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({ 
   categories, 

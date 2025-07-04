@@ -4,7 +4,7 @@ import { usePaystack } from '../hooks/usePaystack';
 import { Plan } from '../types/Plans';
 import { Template } from '../types/Template';
 import StepTracker from '../components/create/StepTracker';
-import TemplateSelection from '../components/create/TemplateSelection';
+import TemplateSelection from '../components/create/templates/TemplateSelection';
 import ShopSetup from '../components/create/ShopSetup';
 import PlanSelection from '../components/create/PlanSelection';
 import PaymentSummary from '../components/create/PaymentSummary';

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import CategoryFilter from './CategoryFilter';
 import TemplateGrid from './TemplateGrid';
-import { templates, getTemplateCategories, getFilteredTemplates } from '../../lib/templateData';
-import { TemplateSelectionProps } from '../../types/Template';
+import { templates, getTemplateCategories, getFilteredTemplates } from '../../../lib/templateData';
+import { TemplateSelectionProps } from '../../../types/Template';
 
 const TemplateSelection: React.FC<TemplateSelectionProps> = ({
   selectedTemplate,
