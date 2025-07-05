@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { User, Settings, Shield, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, Settings as SettingsIcon, Shield, AlertCircle, CheckCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { User as SupabaseUser } from '@supabase/supabase-js';
-import ProfileTab from '@/components/account/ProfileTab';
-import SecurityTab from '@/components/account/SecurityTab';
-import AccountInfoTab from '@/components/account/AccountInfoTab';
+import ProfileTab from '@/components/settings/ProfileTab';
+import SecurityTab from '@/components/settings/SecurityTab';
+import AccountInfoTab from '@/components/settings/AccountInfoTab';
 
-const Account: React.FC = () => {
+const Settings: React.FC = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('profile');
@@ -71,7 +71,7 @@ const Account: React.FC = () => {
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'security', label: 'Security', icon: Shield },
-    { id: 'account', label: 'Account Info', icon: Settings }
+    { id: 'account', label: 'Account Info', icon: SettingsIcon }
   ];
 
   return (
@@ -142,4 +142,4 @@ const Account: React.FC = () => {
   );
 };
 
-export default Account;
+export default Settings;

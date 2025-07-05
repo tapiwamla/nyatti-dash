@@ -6,7 +6,7 @@ import Layout from '@/components/Layout';
 import Dashboard from '@/pages/Dashboard';
 import Shops from '@/pages/Shops';
 import Billing from '@/pages/Billing';
-import Account from '@/pages/Account';
+import Settings from '@/pages/Settings';
 import Login from '@/components/Login';
 import Register from '@/components/Register';
 import Create from '@/pages/Create';
@@ -111,7 +111,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="shops" element={<Shops />} />
           <Route path="billing" element={<Billing />} />
-          <Route path="account" element={<Account />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="create" element={<Create />} />
         </Route>
 
