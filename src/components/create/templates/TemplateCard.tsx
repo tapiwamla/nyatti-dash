@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, ExternalLink } from 'lucide-react';
-import { TemplateCardProps } from '../../../types/Template';
+import { TemplateCardProps } from '@/types/Template';
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, isSelected, onSelect }) => {
   const IconComponent = template.icon;

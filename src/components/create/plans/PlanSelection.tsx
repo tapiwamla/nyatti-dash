@@ -1,6 +1,6 @@
 // components/create/PlanSelection.tsx
 import React from 'react';
-import { Plan } from '../../../types/Plans';
+import { Plan } from '@/types/Plans';
 import PlanCard from './PlanCard';
 
 interface PlanSelectionProps {

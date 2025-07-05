@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { User, Settings, Shield, AlertCircle, CheckCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { User as SupabaseUser } from '@supabase/supabase-js';
-import ProfileTab from '../components/account/ProfileTab';
-import SecurityTab from '../components/account/SecurityTab';
-import AccountInfoTab from '../components/account/AccountInfoTab';
+import ProfileTab from '@/components/account/ProfileTab';
+import SecurityTab from '@/components/account/SecurityTab';
+import AccountInfoTab from '@/components/account/AccountInfoTab';
 
 const Account: React.FC = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);

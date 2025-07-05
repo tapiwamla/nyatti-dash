@@ -1,7 +1,7 @@
 // components/create/PlanCard.tsx
 import React from 'react';
 import { Check, Star } from 'lucide-react';
-import { Plan } from '../../../types/Plans';
+import { Plan } from '@/types/Plans';
 
 interface PlanCardProps {
   plan: Plan;

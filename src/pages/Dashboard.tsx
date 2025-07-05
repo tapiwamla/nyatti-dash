@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Store, TrendingUp, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
 const Dashboard: React.FC = () => {

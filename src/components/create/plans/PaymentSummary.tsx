@@ -1,7 +1,7 @@
 // components/create/PaymentSummary.tsx
 import React from 'react';
 import { Shield, CreditCard } from 'lucide-react';
-import { Plan } from '../../../types/Plans';
+import { Plan } from '@/types/Plans';
 
 interface PaymentSummaryProps {
   selectedPlan: Plan;

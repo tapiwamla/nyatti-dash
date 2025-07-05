@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { supabase } from './lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
-import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Shops from './pages/Shops';
-import Billing from './pages/Billing';
-import Account from './pages/Account';
-import Login from './components/Login';
-import Register from './components/Register';
-import Create from './pages/Create';
+import Layout from '@/components/Layout';
+import Dashboard from '@/pages/Dashboard';
+import Shops from '@/pages/Shops';
+import Billing from '@/pages/Billing';
+import Account from '@/pages/Account';
+import Login from '@/components/Login';
+import Register from '@/components/Register';
+import Create from '@/pages/Create';
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode; user: User | null; loading: boolean }> = ({

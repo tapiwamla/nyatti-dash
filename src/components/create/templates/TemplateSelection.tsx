@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CategoryFilter from './CategoryFilter';
 import TemplateGrid from './TemplateGrid';
 import { templates, getTemplateCategories, getFilteredTemplates } from '../../../lib/templateData';
-import { TemplateSelectionProps } from '../../../types/Template';
+import { TemplateSelectionProps } from '@/types/Template';
 
 // Define the CategoryFilter props interface
 interface CategoryFilterProps {
