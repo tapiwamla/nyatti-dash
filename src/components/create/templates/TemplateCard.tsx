@@ -1,69 +1,86 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, ExternalLink } from 'lucide-react';
 import { TemplateCardProps } from '../../../types/Template';
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, isSelected, onSelect }) => {
   const IconComponent = template.icon;
 
+  const handlePreviewClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(template.previewUrl, '_blank');
+  };
+
   return (
     <div
-      className={`relative bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 ${
+      className={`relative bg-white rounded-xl border transition-all duration-300 hover:shadow-lg cursor-pointer group ${
         isSelected
-          ? 'ring-4 ring-blue-500 ring-opacity-50 shadow-2xl'
-          : ''
+          ? 'border-blue-500 shadow-lg ring-1 ring-blue-500/20'
+          : 'border-gray-200 hover:border-gray-300'
       }`}
       onClick={() => onSelect(template.id)}
     >
       {/* Popular Badge */}
       {template.popular && (
-        <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-          ⭐ Popular
+        <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
+          Popular
         </div>
       )}
-
+      
       {/* Selection Indicator */}
       {isSelected && (
-        <div className="absolute top-4 right-4 z-10 bg-blue-500 text-white rounded-full p-2 shadow-lg">
-          <Check className="w-5 h-5" />
+        <div className="absolute top-3 right-3 z-10 bg-blue-500 text-white rounded-full p-1.5 shadow-sm">
+          <Check className="w-4 h-4" />
         </div>
       )}
 
       {/* Template Preview */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-44 overflow-hidden rounded-t-xl bg-gray-50">
         <img
           src={template.preview}
           alt={template.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className={`absolute inset-0 ${template.color} opacity-20`}></div>
+        <div className={`absolute inset-0 ${template.color} opacity-5`}></div>
       </div>
 
-      {/* Template Info */}
-      <div className="p-6 space-y-4">
-        <div className="flex items-center space-x-3">
-          <div className={`p-3 rounded-lg ${template.color} shadow-lg`}>
-            <IconComponent className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-gray-900">{template.name}</h3>
-            <p className="text-sm text-gray-500 font-medium">{template.category}</p>
+      {/* Content */}
+      <div className="p-5 space-y-4">
+        {/* Header */}
+        <div className="flex items-start justify-between">
+          <div className="flex items-center space-x-3">
+            <div className={`p-2 rounded-lg ${template.color} shadow-sm`}>
+              <IconComponent className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 text-lg leading-tight">{template.name}</h3>
+              <span className="text-sm text-gray-500 font-medium">{template.category}</span>
+            </div>
           </div>
         </div>
 
-        <p className="text-gray-600 leading-relaxed">{template.description}</p>
+        {/* Description */}
+        <p className="text-gray-600 text-sm leading-relaxed">{template.description}</p>
 
         {/* Features */}
         <div className="space-y-2">
-          <p className="text-sm font-semibold text-gray-800">Key Features:</p>
-          <div className="grid grid-cols-2 gap-2">
-            {template.features.map((feature, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-gray-600">{feature}</span>
-              </div>
+          <p className="text-xs font-semibold text-gray-800 uppercase tracking-wide">Features</p>
+          <div className="flex flex-wrap gap-2">
+            {template.features.slice(0, 4).map((feature, index) => (
+              <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium">
+                {feature}
+              </span>
             ))}
           </div>
         </div>
+
+        {/* Live Preview Button */}
+        <button
+          onClick={handlePreviewClick}
+          className="w-full mt-4 bg-gray-50 hover:bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-200/50 hover:border-gray-300"
+        >
+          <ExternalLink className="w-4 h-4" />
+          <span>Preview Template</span>
+        </button>
       </div>
     </div>
   );

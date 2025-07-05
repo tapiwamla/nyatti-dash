@@ -8,6 +8,7 @@ export const templates: Template[] = [
     description: 'Modern tech-focused template with product comparison features',
     icon: Zap,
     preview: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop',
+    previewUrl: 'https://dashiki-template.example.com',
     features: ['Product comparison', 'Specs display', 'Reviews', 'Search filters'],
     category: 'Electronics',
     color: 'bg-gradient-to-br from-blue-500 to-cyan-600'
@@ -18,6 +19,7 @@ export const templates: Template[] = [
     description: 'Multi-vendor template for marketplace businesses',
     icon: Globe,
     preview: 'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=400&h=300&fit=crop',
+    previewUrl: 'https://ubuntu-template.example.com',
     features: ['Vendor profiles', 'Commission tracking', 'Bulk products', 'Advanced search'],
     category: 'Marketplace',
     popular: true,
@@ -29,6 +31,7 @@ export const templates: Template[] = [
     description: 'Versatile template suitable for any type of product',
     icon: Store,
     preview: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
+    previewUrl: 'https://duka-template.example.com',
     features: ['Multi-category', 'Featured products', 'Blog integration', 'SEO optimized'],
     category: 'General',
     color: 'bg-gradient-to-br from-green-500 to-teal-600'
@@ -39,6 +42,7 @@ export const templates: Template[] = [
     description: 'Perfect for food businesses with menu and ordering features',
     icon: Coffee,
     preview: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&h=300&fit=crop',
+    previewUrl: 'https://jua-template.example.com',
     features: ['Menu display', 'Online ordering', 'Table booking', 'Reviews'],
     category: 'Food',
     color: 'bg-gradient-to-br from-amber-500 to-orange-600'
@@ -49,6 +53,7 @@ export const templates: Template[] = [
     description: 'Clean, minimalist design perfect for clothing and accessories',
     icon: Palette,
     preview: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop',
+    previewUrl: 'https://amani-template.example.com',
     features: ['Product galleries', 'Size guides', 'Wishlist', 'Quick view'],
     category: 'Fashion',
     popular: true,
@@ -60,6 +65,7 @@ export const templates: Template[] = [
     description: 'Beautiful template for beauty and cosmetics products',
     icon: Heart,
     preview: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop',
+    previewUrl: 'https://elsie-template.example.com',
     features: ['Product swatches', 'Beauty guides', 'Ingredient lists', 'Reviews'],
     category: 'Cosmetics',
     color: 'bg-gradient-to-br from-rose-500 to-pink-600'

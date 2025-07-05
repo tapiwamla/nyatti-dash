@@ -6,6 +6,7 @@ export interface Template {
   description: string;
   icon: LucideIcon;
   preview: string;
+  previewUrl: string;
   features: string[];
   category: string;
   popular?: boolean;
