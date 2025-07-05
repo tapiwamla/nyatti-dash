@@ -101,7 +101,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleCreateShop = () => {
-    navigate('/create-shop');
+    navigate('/create');
   };
 
   // Show loading state

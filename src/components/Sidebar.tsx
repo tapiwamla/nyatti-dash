@@ -7,7 +7,7 @@ import {
   User,
   PieChart,
   Plus,
-  Layout
+  Cog
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -18,10 +18,10 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
     { to: '/', icon: PieChart, label: 'Dashboard' },
-        { to: '/create', icon: Plus, label: 'Create' },
+    { to: '/create', icon: Plus, label: 'Create' },
     { to: '/shops', icon: ShoppingCart, label: 'Shops' },
-    { to: '/templates', icon: Layout, label: 'Templates' },
     { to: '/account', icon: User, label: 'Account' },
+    { to: '/settings', icon: Cog, label: 'Settings' },
     { to: '/billing', icon: CreditCard, label: 'Billing' },
   ];
 

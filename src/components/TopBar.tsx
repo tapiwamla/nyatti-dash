@@ -38,7 +38,7 @@ const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
   }, [showProfileDropdown, showSupportDropdown, showNotificationDropdown]);
 
   const handleCreateShop = () => {
-    window.location.href = '/templates';
+    window.location.href = '/create';
   };
 
   return (
