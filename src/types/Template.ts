@@ -31,7 +31,7 @@ export interface TemplateCardProps {
 }
 
 export interface CategoryFilterProps {
-  categories: TemplateCategory[];
+  categories: { id: string; name: string; count: number; }[];
   selectedCategory: string;
-  onCategorySelect: (categoryId: string) => void;
+  onCategoryChange: (category: string) => void; // Add this line
 }
