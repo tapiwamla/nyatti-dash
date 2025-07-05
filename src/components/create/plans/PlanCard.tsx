@@ -1,4 +1,4 @@
-// components/create/PlanCard.tsx
+// src/components/create/plans/PlanCard.tsx
 import React from 'react';
 import { Check, Star } from 'lucide-react';
 import { Plan } from '@/types/Plans';

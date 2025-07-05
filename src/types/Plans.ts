@@ -1,4 +1,4 @@
-// types/plans.ts
+// src/types/Plans.ts
 export interface Plan {
   id: 'standard' | 'premium';
   name: string;

@@ -1,6 +1,9 @@
+// src/pages/Create.tsx
 import React, { useState } from 'react';
 import { ArrowLeft, Package, ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { usePaystack } from '@/hooks/usePaystack';
+import { shopService } from '@/lib/supabase';
 import { Plan } from '@/types/Plans';
 import StepTracker from '@/components/create/main/StepTracker';
 import TemplateSelection from '@/components/create/templates/TemplateSelection';
@@ -10,14 +13,16 @@ import PaymentSummary from '@/components/create/plans/PaymentSummary';
 import SuccessToast from '@/components/create/main/SuccessToast';
 
 const Create: React.FC = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null); // Changed from Template | null
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [shopName, setShopName] = useState('');
   const [subdomain, setSubdomain] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<'standard' | 'premium' | null>(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [createdShopId, setCreatedShopId] = useState<string | null>(null);
 
   const formatKES = (amount: number) =>
     new Intl.NumberFormat('en-KE', {
@@ -83,7 +88,7 @@ const Create: React.FC = () => {
   const selectedPlanDetails = plans.find((plan) => plan.id === selectedPlan);
 
   const payNow = usePaystack({
-    email: 'user@example.com',
+    email: 'user@example.com', // You should get this from your auth context
     amount: selectedPlanDetails?.price || 0,
     onSuccess: () => {
       setPaymentComplete(true);
@@ -101,25 +106,61 @@ const Create: React.FC = () => {
   };
 
   const handleActivate = async () => {
-    if (!subdomain.trim() || !shopName.trim()) return;
+    if (!subdomain.trim() || !shopName.trim() || !selectedPlan) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
-      console.log('Saving shop to database...', {
-        shopName,
-        subdomain,
-        template: selectedTemplate, // Now this is a string ID
-        plan: selectedPlan,
+      // Check if subdomain is available
+      const isAvailable = await shopService.checkSubdomainAvailable(subdomain);
+      if (!isAvailable) {
+        alert('This subdomain is already taken. Please choose a different one.');
+        setSubmitting(false);
+        return;
+      }
+
+      // Create the shop in database
+      const newShop = await shopService.createShop({
+        name: shopName,
+        subdomain: subdomain,
+        template_id: selectedTemplate,
+        plan_type: selectedPlan,
+        status: 'active'
       });
 
+      setCreatedShopId(newShop.id);
+      setShowSuccessToast(true);
+      
+      // Auto-hide success toast and navigate to shops page
       setTimeout(() => {
-        setShowSuccessToast(true);
-        setSubmitting(false);
-        setTimeout(() => setShowSuccessToast(false), 5000);
-      }, 1500);
-    } catch (err) {
-      alert('Failed to activate shop.');
+        setShowSuccessToast(false);
+        navigate('/shops');
+      }, 3000);
+
+    } catch (error) {
+      console.error('Error creating shop:', error);
+      alert(error instanceof Error ? error.message : 'Failed to create shop. Please try again.');
+    } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleSubdomainChange = async (value: string) => {
+    const cleanValue = value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+    setSubdomain(cleanValue);
+    
+    // Optional: Check subdomain availability in real-time
+    if (cleanValue.length >= 3) {
+      try {
+        const isAvailable = await shopService.checkSubdomainAvailable(cleanValue);
+        // You could add state to show availability status
+        console.log(`Subdomain ${cleanValue} is ${isAvailable ? 'available' : 'taken'}`);
+      } catch (error) {
+        console.error('Error checking subdomain:', error);
+      }
     }
   };
 
@@ -156,7 +197,7 @@ const Create: React.FC = () => {
       {currentStep === 1 && (
         <TemplateSelection
           selectedTemplate={selectedTemplate}
-          onTemplateSelect={(templateId) => setSelectedTemplate(templateId)} // Changed parameter name
+          onTemplateSelect={(templateId) => setSelectedTemplate(templateId)}
           onContinue={() => {
             if (selectedTemplate) {
               setCurrentStep(2);
@@ -173,7 +214,7 @@ const Create: React.FC = () => {
           subdomain={subdomain}
           submitting={submitting}
           onShopNameChange={setShopName}
-          onSubdomainChange={setSubdomain}
+          onSubdomainChange={handleSubdomainChange}
           onActivate={() => setCurrentStep(3)}
         />
       )}

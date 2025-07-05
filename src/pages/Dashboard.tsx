@@ -1,3 +1,4 @@
+// src/pages/Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import { Plus, Store, TrendingUp, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

@@ -1,4 +1,4 @@
-// components/create/StepTracker.tsx
+// src/components/create/main/StepTracker.tsx
 import React from 'react';
 import { Check } from 'lucide-react';
 

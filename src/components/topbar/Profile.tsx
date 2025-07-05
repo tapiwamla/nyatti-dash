@@ -1,3 +1,4 @@
+// src/components/topbar/Profile.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, UserCircle, LogOut, CreditCard } from 'lucide-react';

@@ -1,3 +1,4 @@
+// src/components/create/templates/TemplateCard.tsx
 import React from 'react';
 import { Check, ExternalLink } from 'lucide-react';
 import { TemplateCardProps } from '@/types/Template';

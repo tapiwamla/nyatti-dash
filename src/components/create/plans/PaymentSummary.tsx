@@ -1,4 +1,4 @@
-// components/create/PaymentSummary.tsx
+// src/components/create/plans/PaymentSummary.tsx
 import React from 'react';
 import { Shield, CreditCard } from 'lucide-react';
 import { Plan } from '@/types/Plans';

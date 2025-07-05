@@ -1,3 +1,4 @@
+// src/components/settings/ProfileTab.tsx
 import React, { useState, useEffect } from 'react';
 import { User, Save } from 'lucide-react';
 import { supabase } from '@/lib/supabase';

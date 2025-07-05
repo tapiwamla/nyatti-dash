@@ -1,3 +1,4 @@
+// src/lib/templateData.ts
 import { Store, Palette, Zap, Globe, ShoppingBag, Coffee, Heart } from 'lucide-react';
 import { Template } from '../types/Template';
 

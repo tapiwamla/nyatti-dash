@@ -1,4 +1,4 @@
-// components/create/PlanSelection.tsx
+// src/components/create/plans/PlanSelection.tsx
 import React from 'react';
 import { Plan } from '@/types/Plans';
 import PlanCard from './PlanCard';

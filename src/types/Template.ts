@@ -1,3 +1,4 @@
+// src/types/Template.ts
 import { LucideIcon } from 'lucide-react';
 
 export interface Template {

@@ -1,3 +1,4 @@
+// src/pages/Billing.tsx
 import React, { useState } from 'react';
 import { CreditCard, Calendar, CheckCircle, Globe, ShoppingCart, AlertCircle } from 'lucide-react';
 

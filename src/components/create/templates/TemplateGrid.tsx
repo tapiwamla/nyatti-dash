@@ -1,3 +1,4 @@
+// src/components/create/templates/TemplateGrid.tsx
 import React from 'react';
 import TemplateCard from './TemplateCard';
 import { Template } from '@/types/Template';

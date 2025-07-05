@@ -1,3 +1,4 @@
+// src/components/main/Layout.tsx
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import TopBar from '../topbar';

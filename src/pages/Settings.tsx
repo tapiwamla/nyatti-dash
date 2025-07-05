@@ -1,3 +1,4 @@
+// src/pages/Settings.tsx
 import React, { useState, useEffect } from 'react';
 import { User, Settings as SettingsIcon, Shield, AlertCircle, CheckCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';

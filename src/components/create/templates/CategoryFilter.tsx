@@ -1,3 +1,4 @@
+// src/components/create/templates/CategoryFilter.tsx
 import React from 'react';
 
 interface CategoryFilterProps {

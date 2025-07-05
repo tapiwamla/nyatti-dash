@@ -1,4 +1,4 @@
-// components/create/SuccessToast.tsx
+// src/components/create/main/SuccessToast.tsx
 import React from 'react';
 import { Check } from 'lucide-react';
 

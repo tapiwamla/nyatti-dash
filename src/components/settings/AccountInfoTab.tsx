@@ -1,3 +1,4 @@
+// src/components/settings/AccountInfoTab.tsx
 import React from 'react';
 import { Mail } from 'lucide-react';
 import { User as SupabaseUser } from '@supabase/supabase-js';

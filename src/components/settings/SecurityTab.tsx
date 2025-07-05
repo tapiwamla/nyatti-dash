@@ -1,3 +1,4 @@
+// src/components/settings/SecurityTab.tsx
 import React, { useState } from 'react';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
