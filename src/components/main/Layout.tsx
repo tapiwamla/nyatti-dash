@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import TopBar from './TopBar';
+import TopBar from '../topbar';
 import Sidebar from './Sidebar';
 
 const Layout: React.FC = () => {

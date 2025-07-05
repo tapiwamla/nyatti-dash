@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
-import Layout from '@/components/Layout';
+import Layout from '@/components/main/Layout';
 import Dashboard from '@/pages/Dashboard';
 import Shops from '@/pages/Shops';
 import Billing from '@/pages/Billing';
 import Settings from '@/pages/Settings';
-import Login from '@/components/Login';
-import Register from '@/components/Register';
+import Login from '@/components/auth/Login';
+import Register from '@/components/auth/Register';
 import Create from '@/pages/Create';
 
 // Protected Route component

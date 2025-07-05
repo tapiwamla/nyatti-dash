@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { ArrowLeft, Package, ShoppingCart } from 'lucide-react';
 import { usePaystack } from '@/hooks/usePaystack';
 import { Plan } from '@/types/Plans';
-import StepTracker from '@/components/create/StepTracker';
+import StepTracker from '@/components/create/main/StepTracker';
 import TemplateSelection from '@/components/create/templates/TemplateSelection';
-import ShopSetup from '@/components/create/ShopSetup';
+import ShopSetup from '@/components/create/setup/ShopSetup';
 import PlanSelection from '@/components/create/plans/PlanSelection';
 import PaymentSummary from '@/components/create/plans/PaymentSummary';
-import SuccessToast from '@/components/create/SuccessToast';
+import SuccessToast from '@/components/create/main/SuccessToast';
 
 const Create: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
